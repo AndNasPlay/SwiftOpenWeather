@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		160A2CFD24BCEBC300B937BC /* FrendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160A2CFC24BCEBC300B937BC /* FrendsViewController.swift */; };
+		160A2CFF24BCF05D00B937BC /* Frends.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160A2CFE24BCF05D00B937BC /* Frends.swift */; };
+		160A2D0124BD8F1100B937BC /* GroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160A2D0024BD8F1100B937BC /* GroupViewController.swift */; };
+		160A2D0324BD92CA00B937BC /* Groups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160A2D0224BD92CA00B937BC /* Groups.swift */; };
+		160A2D0524BD9A8E00B937BC /* frendCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160A2D0424BD9A8E00B937BC /* frendCardViewController.swift */; };
+		160A2D0724BD9B7700B937BC /* FrendCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160A2D0624BD9B7700B937BC /* FrendCard.swift */; };
+		160A2D0924BD9F0400B937BC /* frendCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160A2D0824BD9F0400B937BC /* frendCardCell.swift */; };
 		1698030C24AD177C000377B2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1698030B24AD177C000377B2 /* AppDelegate.swift */; };
 		1698030E24AD177C000377B2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1698030D24AD177C000377B2 /* SceneDelegate.swift */; };
 		1698031024AD177C000377B2 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1698030F24AD177C000377B2 /* LoginViewController.swift */; };
@@ -16,6 +23,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		160A2CFC24BCEBC300B937BC /* FrendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrendsViewController.swift; sourceTree = "<group>"; };
+		160A2CFE24BCF05D00B937BC /* Frends.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Frends.swift; sourceTree = "<group>"; };
+		160A2D0024BD8F1100B937BC /* GroupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupViewController.swift; sourceTree = "<group>"; };
+		160A2D0224BD92CA00B937BC /* Groups.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Groups.swift; sourceTree = "<group>"; };
+		160A2D0424BD9A8E00B937BC /* frendCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = frendCardViewController.swift; sourceTree = "<group>"; };
+		160A2D0624BD9B7700B937BC /* FrendCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrendCard.swift; sourceTree = "<group>"; };
+		160A2D0824BD9F0400B937BC /* frendCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = frendCardCell.swift; sourceTree = "<group>"; };
 		1698030824AD177C000377B2 /* OpenWeather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenWeather.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1698030B24AD177C000377B2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1698030D24AD177C000377B2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -60,6 +74,13 @@
 				1698030D24AD177C000377B2 /* SceneDelegate.swift */,
 				1698030F24AD177C000377B2 /* LoginViewController.swift */,
 				1698031124AD177C000377B2 /* Main.storyboard */,
+				160A2D0424BD9A8E00B937BC /* frendCardViewController.swift */,
+				160A2D0824BD9F0400B937BC /* frendCardCell.swift */,
+				160A2D0624BD9B7700B937BC /* FrendCard.swift */,
+				160A2D0024BD8F1100B937BC /* GroupViewController.swift */,
+				160A2CFC24BCEBC300B937BC /* FrendsViewController.swift */,
+				160A2CFE24BCF05D00B937BC /* Frends.swift */,
+				160A2D0224BD92CA00B937BC /* Groups.swift */,
 				1698031424AD177E000377B2 /* Assets.xcassets */,
 				1698031624AD177E000377B2 /* LaunchScreen.storyboard */,
 				1698031924AD177E000377B2 /* Info.plist */,
@@ -138,9 +159,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				160A2D0524BD9A8E00B937BC /* frendCardViewController.swift in Sources */,
+				160A2D0124BD8F1100B937BC /* GroupViewController.swift in Sources */,
 				1698031024AD177C000377B2 /* LoginViewController.swift in Sources */,
 				1698030C24AD177C000377B2 /* AppDelegate.swift in Sources */,
+				160A2CFF24BCF05D00B937BC /* Frends.swift in Sources */,
+				160A2D0924BD9F0400B937BC /* frendCardCell.swift in Sources */,
 				1698030E24AD177C000377B2 /* SceneDelegate.swift in Sources */,
+				160A2CFD24BCEBC300B937BC /* FrendsViewController.swift in Sources */,
+				160A2D0724BD9B7700B937BC /* FrendCard.swift in Sources */,
+				160A2D0324BD92CA00B937BC /* Groups.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
