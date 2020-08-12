@@ -52,7 +52,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsVerticalScrollIndicator="NO" minimumZoomScale="0.0" dataMode="prototypes" style="grouped" rowHeight="150" estimatedRowHeight="-1" sectionHeaderHeight="25" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="X2y-z0-8d4">
-                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                                 <color key="backgroundColor" red="0.85159403089999997" green="0.8932077289" blue="0.96080201860000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="scrollIndicatorInsets" minX="15" minY="0.0" maxX="15" maxY="0.0"/>
@@ -399,7 +399,7 @@
         <!--Profile-->
         <scene sceneID="Yi1-2X-Zkt">
             <objects>
-                <viewController title="Profile" id="zrQ-Pq-Q3r" sceneMemberID="viewController">
+                <viewController title="Profile" id="zrQ-Pq-Q3r" customClass="ProfileViewController" customModule="OpenWeather" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="uhL-a2-7TK">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -417,19 +417,64 @@
                                     <constraint firstAttribute="width" constant="120" id="ZED-dd-dXy"/>
                                 </constraints>
                             </imageView>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="t6L-cY-tag">
+                                <rect key="frame" x="107" y="572" width="200" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="sGY-67-j5J"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0pY-0L-VV7">
+                                <rect key="frame" x="157" y="625" width="100" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="LDe-0v-LJ6"/>
+                                </constraints>
+                                <state key="normal" title="Add"/>
+                                <connections>
+                                    <action selector="addPoint:" destination="zrQ-Pq-Q3r" eventType="touchUpInside" id="wjY-WL-44j"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pdh-BZ-hpM">
+                                <rect key="frame" x="352" y="88" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7VK-JV-eRa">
+                                <rect key="frame" x="282.5" y="88" width="49.5" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="pdh-BZ-hpM" firstAttribute="centerY" secondItem="7VK-JV-eRa" secondAttribute="centerY" id="5AY-rT-Zcg"/>
+                            <constraint firstItem="0pY-0L-VV7" firstAttribute="top" secondItem="t6L-cY-tag" secondAttribute="bottom" constant="19" id="8Wn-JL-eSW"/>
+                            <constraint firstItem="pdh-BZ-hpM" firstAttribute="leading" secondItem="7VK-JV-eRa" secondAttribute="trailing" constant="20" id="925-YB-rM8"/>
                             <constraint firstItem="EwR-u2-Rcd" firstAttribute="centerX" secondItem="b5Q-M3-cus" secondAttribute="centerX" id="Acv-Wq-gNo"/>
+                            <constraint firstItem="t6L-cY-tag" firstAttribute="centerX" secondItem="b5Q-M3-cus" secondAttribute="centerX" id="EDT-uD-spN"/>
                             <constraint firstItem="gWD-vO-YGF" firstAttribute="centerX" secondItem="b5Q-M3-cus" secondAttribute="centerX" id="WdS-FT-0RD"/>
+                            <constraint firstItem="0pY-0L-VV7" firstAttribute="centerX" secondItem="b5Q-M3-cus" secondAttribute="centerX" id="fKv-Rx-S6B"/>
                             <constraint firstItem="gWD-vO-YGF" firstAttribute="top" secondItem="b5Q-M3-cus" secondAttribute="top" constant="143" id="m03-l6-Kge"/>
+                            <constraint firstItem="b5Q-M3-cus" firstAttribute="trailing" secondItem="pdh-BZ-hpM" secondAttribute="trailing" constant="20" id="oiF-lH-NyX"/>
                             <constraint firstItem="b5Q-M3-cus" firstAttribute="trailing" secondItem="gWD-vO-YGF" secondAttribute="trailing" constant="147" id="pA3-FT-lkJ"/>
+                            <constraint firstItem="t6L-cY-tag" firstAttribute="top" secondItem="EwR-u2-Rcd" secondAttribute="bottom" constant="104.5" id="rza-SF-HHv"/>
+                            <constraint firstItem="7VK-JV-eRa" firstAttribute="top" secondItem="b5Q-M3-cus" secondAttribute="top" id="tqz-gN-YHw"/>
                             <constraint firstItem="EwR-u2-Rcd" firstAttribute="centerY" secondItem="b5Q-M3-cus" secondAttribute="centerY" id="vNv-sS-Hm8"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="b5Q-M3-cus"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Profile" image="star" catalog="system" id="8MR-DZ-BWi"/>
                     <navigationItem key="navigationItem" id="aFG-j2-77E"/>
+                    <connections>
+                        <outlet property="addPoint" destination="0pY-0L-VV7" id="Ny7-hB-f8B"/>
+                        <outlet property="profileAvatar" destination="gWD-vO-YGF" id="i0p-fy-2YY"/>
+                        <outlet property="profileName" destination="EwR-u2-Rcd" id="gsD-rF-6fx"/>
+                        <outlet property="result" destination="pdh-BZ-hpM" id="dPD-bw-y08"/>
+                        <outlet property="scoreTextField" destination="t6L-cY-tag" id="7KF-xi-Ua0"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WWZ-as-yOh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
