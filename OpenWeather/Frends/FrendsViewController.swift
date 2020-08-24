@@ -25,6 +25,7 @@ class FrendsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //        var friendsNewAll: [FriendsItems] = NetworkService.shared.loadFriends(userId: Session.instanse.userId, token: Session.instanse.token)
         tableView.dataSource = self
         
         //let groupedDictionary = Dictionary(grouping: allFrends, by: {$0.surname.first!})
@@ -67,7 +68,7 @@ extension FrendsViewController: UITableViewDataSource {
         return sections[section].names.count
         
     }
-        
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count
         
@@ -78,23 +79,25 @@ extension FrendsViewController: UITableViewDataSource {
         
     }
     
-
+    
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-
+        
         return sections[section].letter
-
+        
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let frend = tableView.dequeueReusableCell(withIdentifier: "Frends") as? Frends else { fatalError() }
+        var friendsNewAll: [FriendsItems] = NetworkService.shared.loadFriends(userId: Session.instanse.userId, token: Session.instanse.token)
         frend.imageLable.image = allFrends[indexPath.section].avatar
         frend.titleLable.text = allFrends[indexPath.section].name
+        frend.titleLable.text = friendsNewAll[indexPath.section].firstName + friendsNewAll[indexPath.section].lastName
         frend.SurName.text = allFrends[indexPath.section].surname
         return frend
         
-
+        
     }
     
 }

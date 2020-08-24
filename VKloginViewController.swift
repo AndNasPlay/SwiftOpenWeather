@@ -10,6 +10,14 @@ import UIKit
 import WebKit
 
 class VkLoginViewController: UIViewController {
+    
+    private var tokenTry: String {
+        Session.instanse.token
+    }
+    private var userIdTry: Int {
+        Session.instanse.userId
+    }
+    
     @IBOutlet var webView: WKWebView! {
         didSet {
             webView.navigationDelegate = self
@@ -33,7 +41,6 @@ class VkLoginViewController: UIViewController {
         ]
         let request = URLRequest(url: components.url!)
         webView.load(request)
-        
     }
 }
 
@@ -55,18 +62,20 @@ extension VkLoginViewController: WKNavigationDelegate {
         print(params)
         
         guard let token = params["access_token"],
-        let userIdString = params["user_id"],
+            let userIdString = params["user_id"],
             let userIdInt = Int(userIdString) else {
                 decisionHandler(.allow)
                 return
         }
         
         Session.instanse.token = token
+        Session.instanse.userId = userIdInt
         
-        NetworkService.loadGroups(token: token)
-        NetworkService.loadFrends(userId: userIdInt, token: token)
-        NetworkService.loadPhoto(userId: userIdInt, token: token)
-       // NetworkService.groupsSearch(token: token, searchText: "AUTO")
+        NetworkService.shared.loadFriends(userId: userIdTry, token: tokenTry)
+        NetworkService.shared.loadGroups(token: tokenTry)
+        NetworkService.shared.loadPhoto(userId: userIdTry, token: tokenTry)
+        NetworkService.shared.groupsSearch(token: tokenTry, searchText: "THE DUMP")
+        
         decisionHandler(.cancel)
     }
 }

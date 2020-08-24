@@ -13,6 +13,7 @@
 		160A2D0324BD92CA00B937BC /* Groups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160A2D0224BD92CA00B937BC /* Groups.swift */; };
 		160A2D0524BD9A8E00B937BC /* frendCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160A2D0424BD9A8E00B937BC /* frendCardViewController.swift */; };
 		16104B2F24C7044A003EF2BB /* frendCardProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16104B2E24C7044A003EF2BB /* frendCardProfile.swift */; };
+		1665607C24F2FD76009CCA58 /* PhotoJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1665607B24F2FD76009CCA58 /* PhotoJSON.swift */; };
 		1667210924E3F82100129333 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1667210824E3F82100129333 /* Session.swift */; };
 		1680AAAB24D17312000EF8ED /* GroupCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1680AAAA24D17312000EF8ED /* GroupCardViewController.swift */; };
 		1680AAB024D18AD8000EF8ED /* GroupCardCellCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1680AAAF24D18AD8000EF8ED /* GroupCardCellCollectionView.swift */; };
@@ -31,6 +32,8 @@
 		1698031524AD177E000377B2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1698031424AD177E000377B2 /* Assets.xcassets */; };
 		1698031824AD177E000377B2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1698031624AD177E000377B2 /* LaunchScreen.storyboard */; };
 		16ABCCB224E923E200BBBEE7 /* VKloginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16ABCCB124E923E200BBBEE7 /* VKloginViewController.swift */; };
+		16C0446124ED876900C9118E /* GroupsJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C0446024ED876900C9118E /* GroupsJSON.swift */; };
+		16C0446324ED947000C9118E /* FriendsJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C0446224ED947000C9118E /* FriendsJSON.swift */; };
 		16C9798924E3231B00A06B72 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C9798824E3231B00A06B72 /* ProfileViewController.swift */; };
 		16C9798B24E323C300A06B72 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C9798A24E323C300A06B72 /* Account.swift */; };
 		16E47CF124E9A11D004CDB6A /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E47CF024E9A11D004CDB6A /* WebKit.framework */; };
@@ -44,6 +47,7 @@
 		160A2D0224BD92CA00B937BC /* Groups.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Groups.swift; sourceTree = "<group>"; };
 		160A2D0424BD9A8E00B937BC /* frendCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = frendCardViewController.swift; sourceTree = "<group>"; };
 		16104B2E24C7044A003EF2BB /* frendCardProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = frendCardProfile.swift; sourceTree = "<group>"; };
+		1665607B24F2FD76009CCA58 /* PhotoJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PhotoJSON.swift; path = /Users/andrejsekatunov/Desktop/IOsLesson/OpenWeather/OpenWeather/PhotoJSON.swift; sourceTree = "<absolute>"; };
 		1667210824E3F82100129333 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		1680AAAA24D17312000EF8ED /* GroupCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCardViewController.swift; sourceTree = "<group>"; };
 		1680AAAF24D18AD8000EF8ED /* GroupCardCellCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCardCellCollectionView.swift; sourceTree = "<group>"; };
@@ -64,6 +68,8 @@
 		1698031724AD177E000377B2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1698031924AD177E000377B2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		16ABCCB124E923E200BBBEE7 /* VKloginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKloginViewController.swift; sourceTree = "<group>"; };
+		16C0446024ED876900C9118E /* GroupsJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsJSON.swift; sourceTree = "<group>"; };
+		16C0446224ED947000C9118E /* FriendsJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsJSON.swift; sourceTree = "<group>"; };
 		16C9798824E3231B00A06B72 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		16C9798A24E323C300A06B72 /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		16E47CF024E9A11D004CDB6A /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
@@ -99,6 +105,7 @@
 			isa = PBXGroup;
 			children = (
 				160A2D0024BD8F1100B937BC /* GroupViewController.swift */,
+				16C0446024ED876900C9118E /* GroupsJSON.swift */,
 				160A2D0224BD92CA00B937BC /* Groups.swift */,
 				1680AAB124D18C3D000EF8ED /* groupCardCellProfile.swift */,
 				1680AAAA24D17312000EF8ED /* GroupCardViewController.swift */,
@@ -114,6 +121,7 @@
 				160A2CFE24BCF05D00B937BC /* Frends.swift */,
 				16104B2E24C7044A003EF2BB /* frendCardProfile.swift */,
 				160A2D0424BD9A8E00B937BC /* frendCardViewController.swift */,
+				16C0446224ED947000C9118E /* FriendsJSON.swift */,
 			);
 			path = Frends;
 			sourceTree = "<group>";
@@ -169,6 +177,7 @@
 		16ABCCB024E923BD00BBBEE7 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				1665607B24F2FD76009CCA58 /* PhotoJSON.swift */,
 				1667210824E3F82100129333 /* Session.swift */,
 				16ABCCB124E923E200BBBEE7 /* VKloginViewController.swift */,
 				168B4C1C24E9462E00F4F9B2 /* NetworkManager.swift */,
@@ -328,6 +337,7 @@
 				1698030C24AD177C000377B2 /* AppDelegate.swift in Sources */,
 				16C9798B24E323C300A06B72 /* Account.swift in Sources */,
 				160A2CFF24BCF05D00B937BC /* Frends.swift in Sources */,
+				16C0446324ED947000C9118E /* FriendsJSON.swift in Sources */,
 				1680AAC324DAA858000EF8ED /* MyGroupCardViewController.swift in Sources */,
 				1680AACC24DB16C9000EF8ED /* NewsViewController.swift in Sources */,
 				1680AABF24D8037B000EF8ED /* MyGroupsController.swift in Sources */,
@@ -339,8 +349,10 @@
 				1680AAC824DB13C3000EF8ED /* News.swift in Sources */,
 				16104B2F24C7044A003EF2BB /* frendCardProfile.swift in Sources */,
 				1698030E24AD177C000377B2 /* SceneDelegate.swift in Sources */,
+				16C0446124ED876900C9118E /* GroupsJSON.swift in Sources */,
 				160A2CFD24BCEBC300B937BC /* FrendsViewController.swift in Sources */,
 				1680AAAB24D17312000EF8ED /* GroupCardViewController.swift in Sources */,
+				1665607C24F2FD76009CCA58 /* PhotoJSON.swift in Sources */,
 				160A2D0324BD92CA00B937BC /* Groups.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
