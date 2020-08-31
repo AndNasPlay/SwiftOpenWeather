@@ -1,8 +1,9 @@
 //
 //  PhotoJSON.swift
+//  OpenWeather
 //
-//
-//  Created by Андрей Щекатунов on 23.08.2020.
+//  Created by Андрей Щекатунов on 28.08.2020.
+//  Copyright © 2020 Andrey Shchekatunov. All rights reserved.
 //
 
 import Foundation

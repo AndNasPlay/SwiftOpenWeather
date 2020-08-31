@@ -70,7 +70,7 @@ class NetworkService {
             guard let data = response.data else { return }
             do {
                 let friends = try JSONDecoder().decode(FriendsInfo.self, from: data).response.items
-                print(friends[0].firstName, friends[0].lastName )
+                print(friends.first!.firstName, friends.first!.lastName )
                 friendsAllNew = friends
             }
             catch {
@@ -108,7 +108,7 @@ class NetworkService {
             "q": searchText,
             "type": "group",
             "count": "1",
-            "v": "5.92"
+            "v": version
         ]
         NetworkService.session.request(baseUrl + Methods.groupsSearch.rawValue, method: .get, parameters: params).responseData { response in
             guard let data = response.data else { return }

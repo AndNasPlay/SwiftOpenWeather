@@ -8,9 +8,12 @@
 
 import UIKit
 import WebKit
+import RealmSwift
 
 class VkLoginViewController: UIViewController {
-    
+    private lazy var realm: Realm? = {
+        return try? Realm()
+    }()
     private var tokenTry: String {
         Session.instanse.token
     }

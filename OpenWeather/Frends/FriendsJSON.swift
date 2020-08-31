@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RealmSwift
 
 class FriendsInfo: Codable {
     var response: FriendsResponse
@@ -16,10 +17,10 @@ class FriendsResponse: Codable {
         var count: Int = 0
         var items: [FriendsItems]
 }
-class FriendsItems: Codable {
-    var id: Int = 0
-    var firstName: String = ""
-    var lastName: String = ""
+class FriendsItems: Object, Codable {
+    @objc dynamic var id: Int = 0
+    @objc dynamic var firstName: String = ""
+    @objc dynamic var lastName: String = ""
     
     enum CodingKeys: String, CodingKey {
         case id

@@ -13,7 +13,7 @@
 		160A2D0324BD92CA00B937BC /* Groups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160A2D0224BD92CA00B937BC /* Groups.swift */; };
 		160A2D0524BD9A8E00B937BC /* frendCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160A2D0424BD9A8E00B937BC /* frendCardViewController.swift */; };
 		16104B2F24C7044A003EF2BB /* frendCardProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16104B2E24C7044A003EF2BB /* frendCardProfile.swift */; };
-		1665607C24F2FD76009CCA58 /* PhotoJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1665607B24F2FD76009CCA58 /* PhotoJSON.swift */; };
+		1620B92E24FC32EA005A4892 /* Realm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1620B92D24FC32EA005A4892 /* Realm.swift */; };
 		1667210924E3F82100129333 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1667210824E3F82100129333 /* Session.swift */; };
 		1680AAAB24D17312000EF8ED /* GroupCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1680AAAA24D17312000EF8ED /* GroupCardViewController.swift */; };
 		1680AAB024D18AD8000EF8ED /* GroupCardCellCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1680AAAF24D18AD8000EF8ED /* GroupCardCellCollectionView.swift */; };
@@ -25,6 +25,7 @@
 		1680AACA24DB1474000EF8ED /* NewsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1680AAC924DB1474000EF8ED /* NewsCell.swift */; };
 		1680AACC24DB16C9000EF8ED /* NewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1680AACB24DB16C9000EF8ED /* NewsViewController.swift */; };
 		168B4C1D24E9462E00F4F9B2 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168B4C1C24E9462E00F4F9B2 /* NetworkManager.swift */; };
+		168FBA6B24F8E2AB002577B2 /* PhotoJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168FBA6A24F8E2AB002577B2 /* PhotoJSON.swift */; };
 		1698030C24AD177C000377B2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1698030B24AD177C000377B2 /* AppDelegate.swift */; };
 		1698030E24AD177C000377B2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1698030D24AD177C000377B2 /* SceneDelegate.swift */; };
 		1698031024AD177C000377B2 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1698030F24AD177C000377B2 /* LoginViewController.swift */; };
@@ -47,7 +48,8 @@
 		160A2D0224BD92CA00B937BC /* Groups.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Groups.swift; sourceTree = "<group>"; };
 		160A2D0424BD9A8E00B937BC /* frendCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = frendCardViewController.swift; sourceTree = "<group>"; };
 		16104B2E24C7044A003EF2BB /* frendCardProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = frendCardProfile.swift; sourceTree = "<group>"; };
-		1665607B24F2FD76009CCA58 /* PhotoJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PhotoJSON.swift; path = /Users/andrejsekatunov/Desktop/IOsLesson/OpenWeather/OpenWeather/PhotoJSON.swift; sourceTree = "<absolute>"; };
+		1620B92D24FC32EA005A4892 /* Realm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Realm.swift; sourceTree = "<group>"; };
+		164FE49124FC33A900CFD511 /* RealmSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RealmSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1667210824E3F82100129333 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		1680AAAA24D17312000EF8ED /* GroupCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCardViewController.swift; sourceTree = "<group>"; };
 		1680AAAF24D18AD8000EF8ED /* GroupCardCellCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCardCellCollectionView.swift; sourceTree = "<group>"; };
@@ -59,6 +61,7 @@
 		1680AAC924DB1474000EF8ED /* NewsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsCell.swift; sourceTree = "<group>"; };
 		1680AACB24DB16C9000EF8ED /* NewsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewController.swift; sourceTree = "<group>"; };
 		168B4C1C24E9462E00F4F9B2 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		168FBA6A24F8E2AB002577B2 /* PhotoJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoJSON.swift; sourceTree = "<group>"; };
 		1698030824AD177C000377B2 /* OpenWeather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenWeather.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1698030B24AD177C000377B2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1698030D24AD177C000377B2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -73,6 +76,7 @@
 		16C9798824E3231B00A06B72 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		16C9798A24E323C300A06B72 /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		16E47CF024E9A11D004CDB6A /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		16E9A1E724FC37D5004E021D /* RealmSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RealmSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2620509B4D533CA9E3C6BECA /* Pods_OpenWeather.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OpenWeather.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F7FEA870F075B9F591FD6B7 /* Pods-OpenWeather.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OpenWeather.release.xcconfig"; path = "Target Support Files/Pods-OpenWeather/Pods-OpenWeather.release.xcconfig"; sourceTree = "<group>"; };
 		FEBB40715390F8CDBA10B9BD /* Pods-OpenWeather.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OpenWeather.debug.xcconfig"; path = "Target Support Files/Pods-OpenWeather/Pods-OpenWeather.debug.xcconfig"; sourceTree = "<group>"; };
@@ -168,6 +172,7 @@
 				1680AAB324D3FA7B000EF8ED /* MyGroups */,
 				16ABCCB024E923BD00BBBEE7 /* Network */,
 				1698031424AD177E000377B2 /* Assets.xcassets */,
+				1620B92D24FC32EA005A4892 /* Realm.swift */,
 				1698031624AD177E000377B2 /* LaunchScreen.storyboard */,
 				1698031924AD177E000377B2 /* Info.plist */,
 			);
@@ -177,7 +182,7 @@
 		16ABCCB024E923BD00BBBEE7 /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				1665607B24F2FD76009CCA58 /* PhotoJSON.swift */,
+				168FBA6A24F8E2AB002577B2 /* PhotoJSON.swift */,
 				1667210824E3F82100129333 /* Session.swift */,
 				16ABCCB124E923E200BBBEE7 /* VKloginViewController.swift */,
 				168B4C1C24E9462E00F4F9B2 /* NetworkManager.swift */,
@@ -207,6 +212,8 @@
 		F703EA83DA41AA0DA330A467 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				16E9A1E724FC37D5004E021D /* RealmSwift.framework */,
+				164FE49124FC33A900CFD511 /* RealmSwift.framework */,
 				16E47CF024E9A11D004CDB6A /* WebKit.framework */,
 				2620509B4D533CA9E3C6BECA /* Pods_OpenWeather.framework */,
 			);
@@ -347,12 +354,13 @@
 				1680AAB024D18AD8000EF8ED /* GroupCardCellCollectionView.swift in Sources */,
 				1667210924E3F82100129333 /* Session.swift in Sources */,
 				1680AAC824DB13C3000EF8ED /* News.swift in Sources */,
+				168FBA6B24F8E2AB002577B2 /* PhotoJSON.swift in Sources */,
 				16104B2F24C7044A003EF2BB /* frendCardProfile.swift in Sources */,
+				1620B92E24FC32EA005A4892 /* Realm.swift in Sources */,
 				1698030E24AD177C000377B2 /* SceneDelegate.swift in Sources */,
 				16C0446124ED876900C9118E /* GroupsJSON.swift in Sources */,
 				160A2CFD24BCEBC300B937BC /* FrendsViewController.swift in Sources */,
 				1680AAAB24D17312000EF8ED /* GroupCardViewController.swift in Sources */,
-				1665607C24F2FD76009CCA58 /* PhotoJSON.swift in Sources */,
 				160A2D0324BD92CA00B937BC /* Groups.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
