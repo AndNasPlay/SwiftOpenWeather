@@ -8,9 +8,16 @@
 
 import Foundation
 import Alamofire
+import RealmSwift
 
 class NetworkService {
     static let shared = NetworkService()
+    private lazy var realm: Realm? = {
+        #if DEBUG
+        print(Realm.Configuration.defaultConfiguration.fileURL ?? "Realm error")
+        #endif
+        return try? Realm()
+    }()
     
     private let baseUrl: String = "https://api.vk.com"
     private let version: String = "5.92"
@@ -47,6 +54,7 @@ class NetworkService {
             guard let data = response.data else { return }
             do {
                 let groupTest = try JSONDecoder().decode(GroupsInfo.self, from: data).response.items
+                self.saveGroupsData(groupTest)
                 print(groupTest[0].name)
             }
             catch {
@@ -62,7 +70,7 @@ class NetworkService {
             "order": "random",
             "v": version,
             "fields": "nickname",
-            "count": "10"
+            "count": 40
         ]
         var friendsAllNew: [FriendsItems] = []
         AF.request(baseUrl + Methods.friends.rawValue, method: .get, parameters: params).responseData {
@@ -70,6 +78,7 @@ class NetworkService {
             guard let data = response.data else { return }
             do {
                 let friends = try JSONDecoder().decode(FriendsInfo.self, from: data).response.items
+                self.saveFriendsData(friends)
                 print(friends.first!.firstName, friends.first!.lastName )
                 friendsAllNew = friends
             }
@@ -79,6 +88,37 @@ class NetworkService {
         }
         return friendsAllNew
         
+    }
+    
+    func saveFriendsData(_ friends: [FriendsItems]) {
+        do {
+            let realm = try Realm()
+            realm.beginWrite()
+            realm.deleteAll()
+            realm.add(friends)
+            try realm.commitWrite()
+            print(Realm.Configuration.defaultConfiguration.fileURL ?? "Realm error")
+        } catch {
+            print(error)
+        }
+    }
+    func saveGroupsData(_ groups: [GroupsItems]) {
+        do {
+            let realm = try Realm()
+            //            if realm.isEmpty {
+            realm.beginWrite()
+            realm.add(groups)
+            try realm.commitWrite()
+            print(Realm.Configuration.defaultConfiguration.fileURL ?? "Realm error")
+            //            } else  {
+            //                try! realm.write {
+            //                    realm.add(groups, update: .modified)
+            //
+            //                }
+            //            }
+        } catch {
+            print(error)
+        }
     }
     
     func loadPhoto(userId: Int, token: String) {
@@ -95,11 +135,23 @@ class NetworkService {
             guard let data = response.data else { return }
             do {
                 let photos = try JSONDecoder().decode(PhotoInfo.self, from: data).response.items
-                print(photos[0].id, photos[0].ownerId)
+                print(photos[0].id, photos[0].ownerId, photos[0].sizes)
+                self.savePhotoData(photos)
             }
             catch {
                 print(error)
             }
+        }
+    }
+    func savePhotoData(_ photo: [PhotoItems]) {
+        do {
+            let realm = try Realm()
+            realm.beginWrite()
+            realm.add(photo)
+            try realm.commitWrite()
+            print(Realm.Configuration.defaultConfiguration.fileURL ?? "Realm error")
+        } catch {
+            print(error)
         }
     }
     func groupsSearch(token: String, searchText: String) {

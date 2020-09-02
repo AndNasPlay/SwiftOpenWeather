@@ -22,6 +22,10 @@ class FriendsItems: Object, Codable {
     @objc dynamic var firstName: String = ""
     @objc dynamic var lastName: String = ""
     
+//    override static func primaryKey() -> String? {
+//        return "id"
+//    }
+    
     enum CodingKeys: String, CodingKey {
         case id
         case firstName = "first_name"
@@ -34,6 +38,7 @@ class FriendsItems: Object, Codable {
         self.firstName = try values.decode(String.self, forKey: .firstName)
         self.lastName = try values.decode(String.self, forKey: .lastName)
     }
+
 }
 
 

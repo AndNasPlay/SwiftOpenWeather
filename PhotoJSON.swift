@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RealmSwift
 
 class PhotoInfo: Codable {
     var response: PhotoResponse
@@ -17,10 +18,10 @@ class PhotoResponse: Codable {
     var items: [PhotoItems]
 }
 
-class PhotoItems: Codable {
-    var id: Int = 0
-    var ownerId: Int = 0
-    var sizes: [String: String] = [:]
+class PhotoItems: Object, Codable {
+    @objc dynamic var id: Int = 0
+    @objc dynamic var ownerId: Int = 0
+    var sizes = List<String>()
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -41,7 +42,8 @@ class PhotoItems: Codable {
             let photo = try photoValues.nestedContainer(keyedBy: PhotoKeys.self)
             let photoType = try photo.decode(String.self, forKey: .type)
             let photoUrl = try photo.decode(String.self, forKey: .url)
-            sizes[photoType] = photoUrl
+            sizes.append(photoUrl)
+            //sizes[photoType] = photoUrl
         }
     }
 }
