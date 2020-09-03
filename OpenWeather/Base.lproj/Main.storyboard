@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Elf-PX-vVB">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
@@ -46,13 +46,13 @@
         <!--Frends-->
         <scene sceneID="iIU-Je-SAg">
             <objects>
-                <viewController id="2T1-fl-ScJ" customClass="FrendsViewController" customModule="OpenWeather" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="2T1-fl-ScJ" customClass="FrendsViewController" customModule="OpenWeather" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5xS-43-yBG">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsVerticalScrollIndicator="NO" minimumZoomScale="0.0" dataMode="prototypes" style="grouped" rowHeight="150" estimatedRowHeight="-1" sectionHeaderHeight="25" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="X2y-z0-8d4">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
                                 <color key="backgroundColor" red="0.85159403089999997" green="0.8932077289" blue="0.96080201860000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="scrollIndicatorInsets" minX="15" minY="0.0" maxX="15" maxY="0.0"/>
@@ -285,23 +285,7 @@
                     <view key="view" contentMode="scaleToFill" id="OIf-nl-ffU">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u5u-So-aA1">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
-                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <wkWebViewConfiguration key="configuration">
-                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
-                                    <wkPreferences key="preferences"/>
-                                </wkWebViewConfiguration>
-                            </wkWebView>
-                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <constraints>
-                            <constraint firstItem="8kp-Ul-5st" firstAttribute="bottom" secondItem="u5u-So-aA1" secondAttribute="bottom" id="5bk-06-wvn"/>
-                            <constraint firstItem="8kp-Ul-5st" firstAttribute="trailing" secondItem="u5u-So-aA1" secondAttribute="trailing" id="F9o-7s-KqH"/>
-                            <constraint firstItem="u5u-So-aA1" firstAttribute="leading" secondItem="8kp-Ul-5st" secondAttribute="leading" id="M6i-sg-izv"/>
-                            <constraint firstItem="u5u-So-aA1" firstAttribute="top" secondItem="8kp-Ul-5st" secondAttribute="top" id="neg-b3-lJO"/>
-                        </constraints>
                         <viewLayoutGuide key="safeArea" id="8kp-Ul-5st"/>
                     </view>
                     <connections>
@@ -347,7 +331,8 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                         <state key="normal" title="Login"/>
                                         <connections>
-                                            <segue destination="WTP-nN-ama" kind="presentation" modalPresentationStyle="fullScreen" id="FRS-PG-4sR"/>
+                                            <action selector="goButtonTap:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0DN-v8-DXk"/>
+                                            <segue destination="WTP-nN-ama" kind="presentation" identifier="loginSegue" modalPresentationStyle="fullScreen" id="tSL-kB-ykB"/>
                                         </connections>
                                     </button>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="oYa-1z-zT1">
@@ -359,6 +344,14 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <wkWebView hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u5u-So-aA1">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="818"/>
+                                        <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <wkWebViewConfiguration key="configuration">
+                                            <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                            <wkPreferences key="preferences"/>
+                                        </wkWebViewConfiguration>
+                                    </wkWebView>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="hdG-qt-rYy" secondAttribute="trailing" constant="97" id="4bo-68-WJz"/>
@@ -368,16 +361,20 @@
                                     <constraint firstItem="Ard-lN-Jlh" firstAttribute="centerX" secondItem="vSI-Iu-CXd" secondAttribute="centerX" id="IPb-ha-2Wh"/>
                                     <constraint firstItem="Ard-lN-Jlh" firstAttribute="top" secondItem="hdG-qt-rYy" secondAttribute="bottom" constant="66" id="KyR-ax-ChL"/>
                                     <constraint firstItem="oWq-QT-812" firstAttribute="centerX" secondItem="Juk-LN-y76" secondAttribute="centerX" id="NYI-QZ-ZIT"/>
+                                    <constraint firstItem="u5u-So-aA1" firstAttribute="leading" secondItem="sW4-L8-89r" secondAttribute="leading" id="NaB-Cq-uEg"/>
                                     <constraint firstItem="hdG-qt-rYy" firstAttribute="top" secondItem="vSI-Iu-CXd" secondAttribute="bottom" constant="30" id="NkF-fp-uRg"/>
                                     <constraint firstAttribute="trailing" secondItem="vSI-Iu-CXd" secondAttribute="trailing" constant="126" id="THC-8u-LJB"/>
                                     <constraint firstItem="Juk-LN-y76" firstAttribute="top" secondItem="oWq-QT-812" secondAttribute="bottom" constant="90" id="Vw4-IJ-J1B"/>
                                     <constraint firstItem="oWq-QT-812" firstAttribute="top" secondItem="Ard-lN-Jlh" secondAttribute="bottom" constant="30" id="Yyv-G0-Kxj"/>
+                                    <constraint firstItem="u5u-So-aA1" firstAttribute="top" secondItem="gCN-Ph-gib" secondAttribute="top" id="ar1-IS-aV1"/>
                                     <constraint firstItem="hdG-qt-rYy" firstAttribute="width" secondItem="oWq-QT-812" secondAttribute="width" id="bu4-xu-lAj"/>
                                     <constraint firstItem="hdG-qt-rYy" firstAttribute="centerX" secondItem="Ard-lN-Jlh" secondAttribute="centerX" id="dt3-BQ-pfu"/>
                                     <constraint firstItem="vSI-Iu-CXd" firstAttribute="firstBaseline" secondItem="oYa-1z-zT1" secondAttribute="baseline" constant="100" id="gGj-IZ-qFi"/>
                                     <constraint firstItem="vSI-Iu-CXd" firstAttribute="centerX" secondItem="hdG-qt-rYy" secondAttribute="centerX" id="gcy-Fb-vfj"/>
                                     <constraint firstItem="oYa-1z-zT1" firstAttribute="top" secondItem="gCN-Ph-gib" secondAttribute="top" constant="50" id="hN0-8k-IN1"/>
                                     <constraint firstItem="oYa-1z-zT1" firstAttribute="centerX" secondItem="gCN-Ph-gib" secondAttribute="centerX" id="iBr-3I-pnn"/>
+                                    <constraint firstAttribute="trailing" secondItem="u5u-So-aA1" secondAttribute="trailing" id="pEn-2q-1Qc"/>
+                                    <constraint firstItem="WFb-xG-tRI" firstAttribute="bottom" secondItem="u5u-So-aA1" secondAttribute="bottom" id="s5f-ol-TMT"/>
                                     <constraint firstItem="Ard-lN-Jlh" firstAttribute="centerX" secondItem="oWq-QT-812" secondAttribute="centerX" id="vKy-Fq-VZf"/>
                                     <constraint firstAttribute="trailing" secondItem="oYa-1z-zT1" secondAttribute="trailing" constant="157" id="zZW-lp-L2f"/>
                                 </constraints>
@@ -401,6 +398,7 @@
                         <outlet property="loginField" destination="hdG-qt-rYy" id="TWG-eM-0mX"/>
                         <outlet property="passwordField" destination="oWq-QT-812" id="Gkh-eX-vfI"/>
                         <outlet property="scrollView" destination="gCN-Ph-gib" id="HTK-Gu-A1m"/>
+                        <outlet property="webView" destination="u5u-So-aA1" id="Mp6-Ec-5PG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

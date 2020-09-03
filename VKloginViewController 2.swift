@@ -11,7 +11,9 @@ import WebKit
 import RealmSwift
 
 class VkLoginViewController: UIViewController {
-    
+    private lazy var realm: Realm? = {
+        return try? Realm()
+    }()
     private var tokenTry: String {
         Session.instanse.token
     }
@@ -19,11 +21,11 @@ class VkLoginViewController: UIViewController {
         Session.instanse.userId
     }
     
-//    @IBOutlet var webView: WKWebView! {
-//        didSet {
-//            webView.navigationDelegate = self
-//        }
-//    }
+    @IBOutlet var webView: WKWebView! {
+        didSet {
+            webView.navigationDelegate = self
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,7 +43,7 @@ class VkLoginViewController: UIViewController {
             
         ]
         let request = URLRequest(url: components.url!)
-        //webView.load(request)
+        webView.load(request)
     }
 }
 
@@ -69,14 +71,13 @@ extension VkLoginViewController: WKNavigationDelegate {
                 return
         }
         
-        
         Session.instanse.token = token
         Session.instanse.userId = userIdInt
         
         NetworkService.shared.loadFriends(userId: userIdTry, token: tokenTry)
         NetworkService.shared.loadGroups(token: tokenTry)
         NetworkService.shared.loadPhoto(userId: userIdTry, token: tokenTry)
-        //NetworkService.shared.groupsSearch(token: tokenTry, searchText: "THE DUMP")
+        NetworkService.shared.groupsSearch(token: tokenTry, searchText: "THE DUMP")
         
         decisionHandler(.cancel)
     }
