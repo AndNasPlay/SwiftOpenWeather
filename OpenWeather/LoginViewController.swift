@@ -27,6 +27,7 @@ class LoginViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         var components = URLComponents()
         components.scheme = "https"
         components.host = "oauth.vk.com"
@@ -106,12 +107,12 @@ class LoginViewController: UIViewController {
         return true
     }
     
-    private func showLoginError() {
-        let alert = UIAlertController(title: "Ошубка", message: "Login / pass is not correct", preferredStyle: .actionSheet    )
-        let action = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
-        alert.addAction(action)
-        present(alert, animated: true, completion: nil)
-    }
+//    private func showLoginError() {
+//        let alert = UIAlertController(title: "Ошубка", message: "Login / pass is not correct", preferredStyle: .actionSheet    )
+//        let action = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+//        alert.addAction(action)
+//        present(alert, animated: true, completion: nil)
+//    }
 }
 extension LoginViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
@@ -140,11 +141,11 @@ extension LoginViewController: WKNavigationDelegate {
         
         Session.instanse.token = token
         Session.instanse.userId = userIdInt
-        
-        NetworkService.shared.loadFriends(userId: userIdTry, token: tokenTry)
-        NetworkService.shared.loadGroups(token: tokenTry)
-        NetworkService.shared.loadPhoto(userId: userIdTry, token: tokenTry)
-        //NetworkService.shared.groupsSearch(token: tokenTry, searchText: "THE DUMP")
+        performSegue(withIdentifier: "loginSegue", sender: nil)
+//         NetworkService.shared.loadFriends(userId: userIdTry, token: tokenTry)
+//        NetworkService.shared.loadGroups(token: tokenTry)
+//        NetworkService.shared.loadPhoto(userId: userIdTry, token: tokenTry)
+//        NetworkService.shared.groupsSearch(token: tokenTry, searchText: "THE DUMP")
         
         decisionHandler(.cancel)
     }

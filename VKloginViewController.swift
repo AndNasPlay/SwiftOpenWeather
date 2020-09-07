@@ -73,9 +73,9 @@ extension VkLoginViewController: WKNavigationDelegate {
         Session.instanse.token = token
         Session.instanse.userId = userIdInt
         
-        NetworkService.shared.loadFriends(userId: userIdTry, token: tokenTry)
-        NetworkService.shared.loadGroups(token: tokenTry)
-        NetworkService.shared.loadPhoto(userId: userIdTry, token: tokenTry)
+//        NetworkService.shared.loadFriends(userId: userIdTry, token: tokenTry)
+//        NetworkService.shared.loadGroups(token: tokenTry)
+//        NetworkService.shared.loadPhoto(userId: userIdTry, token: tokenTry)
         //NetworkService.shared.groupsSearch(token: tokenTry, searchText: "THE DUMP")
         
         decisionHandler(.cancel)

@@ -14,19 +14,35 @@ class Frends: UITableViewCell {
     @IBOutlet weak var imageLable: UIImageView!
     @IBOutlet weak var shadowView: UIImageView!
     
+    var friendsModel: FriendsItems? {
+        didSet {
+            setup()
+        }
+    }
+    
+    private func setup() {
+        guard let friendsModel = friendsModel else { return }
+        let id = friendsModel.id.hashValue
+        let firstName = friendsModel.firstName
+        let lastName = friendsModel.lastName
 
+        titleLable.text = "firstName:\(firstName)"
+        SurName.text = "lastName: \(lastName)"
+    }
+
+    
     @IBInspectable var shadowOpacity: Float = 0.6 {
         didSet {
             setNeedsDisplay()
         }
     }
-    
+
     @IBInspectable var shadowColorNew: UIColor? {
         didSet {
             setNeedsDisplay()
         }
     }
-    
+
     @IBInspectable var shadowRadius: CGFloat = 20 {
         didSet {
             setNeedsDisplay()
@@ -36,11 +52,11 @@ class Frends: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         imageLable.layer.cornerRadius = 50
-        //imageLable.contentMode = .scaleAspectFill
-        //imageLable.layer.masksToBounds = true
-        //imageLable.backgroundColor = .black
+        imageLable.contentMode = .scaleAspectFill
+        imageLable.layer.masksToBounds = true
+        imageLable.backgroundColor = .black
         imageLable.clipsToBounds = true
-        
+
         shadowView.layer.shadowColor = shadowColorNew?.cgColor
         shadowView.layer.shadowOpacity = shadowOpacity
         shadowView.layer.shadowRadius = shadowRadius
@@ -48,9 +64,9 @@ class Frends: UITableViewCell {
         shadowView.clipsToBounds = false
         shadowView.layer.shadowPath = UIBezierPath(roundedRect: shadowView.bounds, cornerRadius: 20).cgPath
         shadowView.addSubview(imageLable)
-        //shadowView.backgroundColor = .black
-        //shadowView.layer.shadowOffset = .zero
-        
+        shadowView.backgroundColor = .black
+        shadowView.layer.shadowOffset = .zero
+
     }
     
 }

@@ -12,12 +12,10 @@ import RealmSwift
 
 class NetworkService {
     static let shared = NetworkService()
-    private lazy var realm: Realm? = {
-        #if DEBUG
-        print(Realm.Configuration.defaultConfiguration.fileURL ?? "Realm error")
-        #endif
-        return try? Realm()
-    }()
+
+    enum NetworkError: Error {
+        case incorrectData
+    }
     
     private let baseUrl: String = "https://api.vk.com"
     private let version: String = "5.92"
@@ -36,6 +34,9 @@ class NetworkService {
         case saved = "saved"
     }
     
+    private var session: URLSession {
+        return URLSession.shared
+    }
     static let session: Alamofire.Session = {
         let configuration = URLSessionConfiguration.default
         configuration.timeoutIntervalForRequest = 20
@@ -62,8 +63,44 @@ class NetworkService {
             }
         }
     }
+    func loadUsers(userId: Int, token: String, completion: @escaping (Result<[FriendsItems], NetworkError>) -> Void) {
+        let params: Parameters = [
+            "access_token": userId,
+            "user_id": token,
+            "order": "random",
+            "v": version,
+            "fields": "nickname",
+            "count": 40
+        ]
+        AF.request(baseUrl + Methods.friends.rawValue, method: .get, parameters: params).responseData {  response in
+            guard let data = response.data, let vkFriends = try? JSONDecoder().decode(FriendsInfo.self, from: data).response.items else {
+                completion(.failure(.incorrectData))
+                return
+            }
+            completion(.success(vkFriends))
+        }.resume()
+    }
+    func loadVkFriends(userId: Int, token: String, completion: @escaping (Result<[FriendsItems], NetworkError>) -> Void) {
+        let params: Parameters = [
+            "access_token": userId,
+            "user_id": token,
+            "order": "random",
+            "v": version,
+            "fields": "nickname",
+            "count": 40
+        ]
+        AF.request(baseUrl + Methods.friends.rawValue, method: .get, parameters: params).responseData { response in
+            guard let data = response.data,
+            let vkFriends = try? JSONDecoder().decode(FriendsInfo.self, from: data).response.items else {
+                completion(.failure(.incorrectData))
+                return
+            }
+            completion(.success(vkFriends))
+        }.resume()
+        
+    }
     
-    func loadFriends(userId: Int, token: String) -> [FriendsItems] {
+    func loadFriends(userId: Int, token: String, completion: ((Result<[FriendsItems], Error>) -> Void)? = nil) {
         let params: Parameters = [
             "access_token": token,
             "user_id": userId,
@@ -72,22 +109,20 @@ class NetworkService {
             "fields": "nickname",
             "count": 40
         ]
-        var friendsAllNew: [FriendsItems] = []
+        
         AF.request(baseUrl + Methods.friends.rawValue, method: .get, parameters: params).responseData {
             response in
-            guard let data = response.data else { return }
+            guard let data = response.value else { return }
             do {
                 let friends = try JSONDecoder().decode(FriendsInfo.self, from: data).response.items
+                completion?(.success(friends))
                 self.saveFriendsData(friends)
-                print(friends.first!.firstName, friends.first!.lastName )
-                friendsAllNew = friends
             }
             catch {
-                print(error)
+                print(error.localizedDescription)
+                completion?(.failure(error))
             }
-        }
-        return friendsAllNew
-        
+        }.resume()
     }
     
     func saveFriendsData(_ friends: [FriendsItems]) {

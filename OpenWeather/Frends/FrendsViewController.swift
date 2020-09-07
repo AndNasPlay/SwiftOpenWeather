@@ -10,99 +10,167 @@ import UIKit
 import RealmSwift
 
 class FrendsViewController: UIViewController {
-    @IBOutlet weak var tableView: UITableView!
     
-    var allFrends = [
-        frendProfile(name: "Андрей", surname: "Андреев", age: "27", avatar: UIImage(named: "man1.png")!, gender: .man ),
-        frendProfile(name: "Артем", surname: "Борисов", age: "30", avatar: UIImage(named: "man2.png")!, gender: .man),
-        frendProfile(name: "Борис", surname: "Ваганов", age: "33", avatar: UIImage(named: "man3.png")!, gender: .man),
-        frendProfile(name: "Татьяна", surname: "Герасимова", age: "21", avatar: UIImage(named: "girl1.png")!, gender: .woman),
-        frendProfile(name: "Мария",surname: "Димова", age: "28", avatar: UIImage(named: "girl2.png")!, gender: .woman),
-        frendProfile(name: "Эльза",surname: "Шекелева", age: "32", avatar: UIImage(named: "girl3.png")!, gender: .woman)
-    ]
+    @IBOutlet weak var searchTextField: UISearchBar!
     
-    let contacts = ["Андреев", "Борисов", "Ваганов", "Герасимова", "Димова", "Шекелева"]
-    var sections = [Section]()
+    private let realmManager = RealmManager.shared
+    private let networkManager = NetworkService.shared
+    private var tokenTry: String {
+        Session.instanse.token
+    }
+    private var userIdTry: Int {
+        Session.instanse.userId
+    }
+
+    @IBOutlet weak var tableView: UITableView! {
+        didSet {
+            tableView.delegate = self
+            tableView.dataSource = self
+        }
+    }
+        
+    private var vkFriends: Results<FriendsItems>? {
+        let vkFriends: Results<FriendsItems>? = realmManager?.getObjects()
+        return vkFriends?.sorted(byKeyPath: "id", ascending: true)
+    }
+    
+    private var filteredvkFriends: Results<FriendsItems>? {
+        guard !searchText.isEmpty else { return vkFriends }
+        return vkFriends?.filter(NSPredicate(format: "firstName CONTAINS[cd] %@", searchText))
+    }
+    private var searchText: String {
+        searchTextField.text ?? ""
+    }
+    private func loadData(completion: (() -> Void)? = nil) {
+        networkManager.loadFriends(userId: userIdTry, token: tokenTry) { [weak self] result in
+            switch result {
+            case let .success(friends):
+                
+                DispatchQueue.main.async {
+                    try? self?.realmManager?.add(objects: friends)
+                    self?.tableView.reloadData()
+                    completion?()
+                }
+                
+            case let .failure(error):
+                print(error)
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //        var friendsNewAll: [FriendsItems] = NetworkService.shared.loadFriends(userId: Session.instanse.userId, token: Session.instanse.token)
+        if let vkFriends = vkFriends, vkFriends.isEmpty {
+            loadData()
+        }
         tableView.dataSource = self
-        
-        //let groupedDictionary = Dictionary(grouping: allFrends, by: {$0.surname.first!})
-        //let keys = groupedDictionary.keys.sorted()
-        // Не знаю как реализовать используя один массив allFrends
-        let groupedDictionary = Dictionary(grouping: contacts, by: {String($0.prefix(1))})
-        let keys = groupedDictionary.keys.sorted()
-        sections = keys.map{ Section(letter: $0, names: groupedDictionary[$0]!.sorted())}
-        self.tableView.reloadData()
-        
-        
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        super.prepare(for: segue, sender: sender)
-        if segue.identifier == "frendSegue",
-            let frend = sender as? Frends,
-            let destination = segue.destination as? frendCardViewController {
-            destination.frendName = frend.titleLable.text
-            destination.frendAvatar = frend.imageLable
-            for i in 0...5 {
-                if frend.titleLable.text == allFrends[i].name {
-                    destination.frendGender = allFrends[i].gender.rawValue
-                    destination.frendAge = allFrends[i].age
-                    break
-                }
-                else {
-                    print("Ошибка")
+        override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+            super.prepare(for: segue, sender: sender)
+            if segue.identifier == "frendSegue",
+                let frend = sender as? Frends,
+                let destination = segue.destination as? frendCardViewController {
+                destination.frendName = frend.titleLable.text
+                //destination.frendAvatar = frend.imageLable
+                for i in 0...vkFriends!.count {
+                    if frend.titleLable.text == filteredvkFriends?[i].firstName {
+                        destination.friendlastName = String(filteredvkFriends?[i].lastName ?? "Дима")
+                        //destination.frendAge = Int(filteredvkFriends?[i].id)
+                        break
+                    }
+                    else {
+                        print("Ошибка")
+                    }
                 }
             }
+    
         }
-        
+    
+}
+extension FrendsViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return filteredvkFriends?.count ?? 0
     }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let friend = tableView.dequeueReusableCell(withIdentifier: "Frends") as? Frends else { fatalError() }
+        friend.titleLable.text = filteredvkFriends?[indexPath.item].firstName
+        friend.SurName.text = filteredvkFriends?[indexPath.item].lastName
+        return friend
+    }
+    
     
 }
 
-extension FrendsViewController: UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sections[section].names.count
-        
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return sections.count
-        
-    }
-    
-    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-        return sections.map{$0.letter}
-        
-    }
-    
-    
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        
-        return sections[section].letter
-        
-    }
-    
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let frend = tableView.dequeueReusableCell(withIdentifier: "Frends") as? Frends else { fatalError() }
-        
-        let friendsNewAll: [FriendsItems] = NetworkService.shared.loadFriends(userId: Session.instanse.userId, token: Session.instanse.token)
-        frend.imageLable.image = allFrends[indexPath.section].avatar
-        frend.titleLable.text = friendsNewAll[indexPath.section].lastName
-        frend.titleLable.text = friendsNewAll[indexPath.section].firstName
-            //friendsNewAll[indexPath.section].firstName
-//            + friendsNewAll[indexPath.section].lastName
-        frend.SurName.text = allFrends[indexPath.section].surname
-        return frend
-        
-        
-    }
-    
-}
+
+
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        guard let vkFriend = vkFriends?[indexPath.item] else { return }
+//        if (try? realmManager?.delete(object: vkFriend)) != nil {
+//            tableView.deleteRows(at: [indexPath], with: .right)
+//        }
+//    }
+
+
+//extension FrendsViewController: UITableViewDataSource {
+//
+//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        return vkFriends?.count ?? 0
+//            //sections[section].names.count
+//
+//    }
+//
+////    func numberOfSections(in tableView: UITableView) -> Int {
+////        return sections.count
+////
+////    }
+//
+////    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+////        return sections.map{$0.letter}
+////
+////    }
+//
+//
+//
+////    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+////
+////        return sections[section].letter
+////
+////    }
+//
+//
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        guard let frend = tableView.dequeueReusableCell(withIdentifier: "Frends") as? Frends else { fatalError() }
+////        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+////
+////            let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: UserInfoTableViewCell.self), for: indexPath) as! UserInfoTableViewCell
+////
+////            let userModel = filteredUsers?[indexPath.item]
+////            cell.userModel = userModel
+////
+////            return cell
+////        }
+////
+////        func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+////            guard let user = filteredUsers?[indexPath.item] else { return }
+////            if (try? realmManager?.delete(object: user)) != nil {
+////                tableView.deleteRows(at: [indexPath], with: .right)
+////            }
+////        }
+//
+//        //let friendsNewAll: [FriendsItems] = NetworkService.shared.loadFriends(userId: Session.instanse.userId, token: Session.instanse.token)
+//        let friendsModel = vkFriends?[indexPath.item]
+//        frend.friendsModel = friendsModel
+//        //frend.imageLable.image = allFrends.first?.avatar
+//
+//            //friendsNewAll[indexPath.section].firstName
+////            + friendsNewAll[indexPath.section].lastName
+//        //frend.SurName.text = vkFriends?[indexPath.item].lastName
+//        return frend
+//
+//
+//    }
+//
+
 
