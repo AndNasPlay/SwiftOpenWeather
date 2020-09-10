@@ -7,28 +7,33 @@
 //
 
 import UIKit
+import SDWebImage
 class frendCardViewController: UIViewController {
     
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var lastName: UILabel!
     @IBOutlet weak var avatar: UIImageView!
-    @IBOutlet weak var age: UILabel!
-    @IBOutlet weak var gender: UILabel!
-    
+
     var frendName: String?
-    var frendAvatar: UIImageView?
-    var frendAge: String?
-    var frendGender: String?
+    var frendAvatar: String!
     var friendlastName: String?
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         name.text = frendName
         lastName.text = friendlastName
-
-        
+        avatar.sd_setImage(with: URL(string: frendAvatar)!)
     }
+//    override func awakeFromNib() {
+//        super.awakeFromNib()
+//        avatar.layer.cornerRadius = 50
+//        avatar.contentMode = .scaleAspectFill
+//        avatar.layer.masksToBounds = true
+//        avatar.backgroundColor = .black
+//        avatar.clipsToBounds = true
+//    }
 }
+
+
+
 

@@ -11,9 +11,7 @@ import UIKit
 struct frendProfile {
     var name: String
     var surname: String
-    var age: String
     var avatar: UIImage
-    var gender: gender
     
 }
 

@@ -12,25 +12,25 @@ class MyGroupController: UIViewController {
     @IBOutlet weak var MygroupTableView: UITableView!
     var MyGroupsInfo = [groupProfile]()
     
-    @IBAction func addGroup(segue: UIStoryboardSegue) {
-        
-        if segue.identifier == "addGroup" {
-            guard let groupViewController = segue.source as? GroupViewController else { return }
-            if let indexPath = groupViewController.groupTableView.indexPathForSelectedRow {
-                let group = groupViewController.ALLGroupsInfo[indexPath.row]
-                if MyGroupsInfo.isEmpty {
-                    MyGroupsInfo.append(group)
-                } else {
-                    let test = MyGroupsInfo.filter{ $0.name == group.name}.first
-                    if test == nil {
-                        MyGroupsInfo.append(group)
-                    }
-                }
-            }
-            MygroupTableView?.reloadData()
-        }
-        
-    }
+//    @IBAction func addGroup(segue: UIStoryboardSegue) {
+//
+//        if segue.identifier == "addGroup" {
+//            guard let groupViewController = segue.source as? GroupViewController else { return }
+//            if let indexPath = groupViewController.groupTableView.indexPathForSelectedRow {
+//                let group = groupViewController.ALLGroupsInfo[indexPath.row]
+//                if MyGroupsInfo.isEmpty {
+//                    MyGroupsInfo.append(group)
+//                } else {
+//                    let test = MyGroupsInfo.filter{ $0.name == group.name}.first
+//                    if test == nil {
+//                        MyGroupsInfo.append(group)
+//                    }
+//                }
+//            }
+//            MygroupTableView?.reloadData()
+//        }
+//
+//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,10 +44,9 @@ class MyGroupController: UIViewController {
             let destination = segue.destination as? MyGroupCardViewController
         {
             destination.groupName = cell.titleLable.text
-            destination.groupImage = cell.imageGroupTitle
             var needType: String = "Ошибка Type"
             var needCategory: String = "Ошибка Category"
-            for i in 0...MyGroupsInfo.count {
+            for i in 0... {
                 if cell.titleLable.text == MyGroupsInfo[i].name {
                     needType = MyGroupsInfo[i].type.rawValue
                     needCategory = MyGroupsInfo[i].category

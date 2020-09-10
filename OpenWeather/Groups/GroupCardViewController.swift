@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class GroupCardViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
@@ -15,7 +16,7 @@ class GroupCardViewController: UIViewController {
     @IBOutlet weak var typeOfgroup: UILabel!
 
     var groupName: String?
-    var groupImage: UIImageView?
+    var groupImage: String!
     var groupType: String?
     var groupCategory: String?
     
@@ -24,8 +25,9 @@ class GroupCardViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         titleLable.text = groupName
-        imageGroupTitle.image = groupImage?.image
-        typeOfgroup.text = groupType
+        imageGroupTitle.sd_setImage(with: URL(string: groupImage))
+        typeOfgroup.text = "Тип: \(groupType!)"
+        
     }
 
     

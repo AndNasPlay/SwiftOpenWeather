@@ -6,6 +6,7 @@
 //  Copyright © 2020 Andrey Shchekatunov. All rights reserved.
 //
 
+import SDWebImage
 import UIKit
 
 class Frends: UITableViewCell {
@@ -25,9 +26,14 @@ class Frends: UITableViewCell {
         let id = friendsModel.id.hashValue
         let firstName = friendsModel.firstName
         let lastName = friendsModel.lastName
+        let imageUrl = friendsModel.avatarFriend
+        
 
-        titleLable.text = "firstName:\(firstName)"
-        SurName.text = "lastName: \(lastName)"
+        titleLable.text = firstName
+        SurName.text = lastName
+        imageLable.sd_setImage(with: URL(string: imageUrl))
+        shadowView.sd_setImage(with: URL(string: imageUrl))
+        
     }
 
     
@@ -43,7 +49,7 @@ class Frends: UITableViewCell {
         }
     }
 
-    @IBInspectable var shadowRadius: CGFloat = 20 {
+    @IBInspectable var shadowRadius: CGFloat = 50 {
         didSet {
             setNeedsDisplay()
         }
@@ -62,7 +68,8 @@ class Frends: UITableViewCell {
         shadowView.layer.shadowRadius = shadowRadius
         shadowView.layer.shadowOffset = CGSize.zero
         shadowView.clipsToBounds = false
-        shadowView.layer.shadowPath = UIBezierPath(roundedRect: shadowView.bounds, cornerRadius: 20).cgPath
+        //shadowView.layer.cornerRadius = 50
+        shadowView.layer.shadowPath = UIBezierPath(roundedRect: shadowView.bounds, cornerRadius: 50).cgPath
         shadowView.addSubview(imageLable)
         shadowView.backgroundColor = .black
         shadowView.layer.shadowOffset = .zero

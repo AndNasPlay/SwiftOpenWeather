@@ -7,20 +7,46 @@
 //
 
 import UIKit
+import RealmSwift
 
 class GroupViewController: UIViewController {
-    @IBOutlet weak var groupTableView: UITableView!
     
-    var ALLGroupsInfo = [
-        groupProfile(type: .moto, category: "Street", name: "Ktm", groupImg: UIImage(named: "ktm.png")!, addGroup: .notAppend),
-        groupProfile(type: .auto, category: "Street", name: "BMW", groupImg: UIImage(named: "bmw.png")!, addGroup: .notAppend),
-        groupProfile(type: .auto, category: "Money", name: "Mercedes", groupImg: UIImage(named: "mercedes.png")!, addGroup: .notAppend),
-        groupProfile(type: .moto, category: "Touring", name: "Honda", groupImg: UIImage(named: "honda.png")!, addGroup: .notAppend),
-        groupProfile(type: .business, category: "HardMoney", name: "Chisto Kristo", groupImg: UIImage(named: "chistokristo.png")!, addGroup: .notAppend),
-        groupProfile(type: .business, category: "EasyMoney", name: "Успешный успех", groupImg: UIImage(named: "successfulsuccess.png")!, addGroup: .notAppend)
-    ]
+    @IBOutlet weak var groupTableView: UITableView! {
+        didSet {
+            groupTableView.dataSource = self
+        }
+    }
     
-    private var filteredGroups = [groupProfile]()
+    private let realmManager = RealmManager.shared
+    private let networkManager = NetworkService.shared
+    
+    private var tokenTry: String {
+        Session.instanse.token
+    }
+    private var userIdTry: Int {
+        Session.instanse.userId
+    }
+    
+    private var vkGroups: Results<GroupsItems>? {
+        let vkGroups: Results<GroupsItems>? = realmManager?.getObjects()
+        return vkGroups?.sorted(byKeyPath: "id", ascending: true)
+    }
+    private func loadData(completion: (() -> Void)? = nil) {
+        networkManager.loadGroups(token: tokenTry) { [weak self] result in
+            switch result {
+            case let .success(groups):
+                DispatchQueue.main.async {
+                    try? self?.realmManager?.add(objects: groups)
+                    self?.groupTableView.reloadData()
+                    completion?()
+                }
+            case let .failure(error):
+                print(error)
+            }
+        }
+    }
+    
+    
     private let searchController = UISearchController(searchResultsController: nil)
     private var searchBarIsEmpty: Bool {
         guard let text = searchController.searchBar.text else { return false }
@@ -29,10 +55,22 @@ class GroupViewController: UIViewController {
     private var isFiltering: Bool {
         return searchController.isActive && !searchBarIsEmpty
     }
+    private var filteredGroups: [GroupsItems]? {
+        guard !searchText.isEmpty else { return vkGroups != nil ? Array(vkGroups!) : [] }
+        return vkGroups?.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+        
+    }
+    private var searchText: String {
+        searchController.searchBar.text ?? ""
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if let vkGroups = vkGroups, vkGroups.isEmpty {
+            loadData()
+        }
         groupTableView.dataSource = self
+        
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Поиск"
@@ -40,35 +78,25 @@ class GroupViewController: UIViewController {
         definesPresentationContext = true
     }
     
+    
+    
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
         if segue.identifier == "groupSegue",
             let cell = sender as? Groups,
             let destination = segue.destination as? GroupCardViewController
         {
-            var GroupFilteredArr : [groupProfile]
-            if isFiltering {
-                GroupFilteredArr = filteredGroups
-            } else {
-                GroupFilteredArr = ALLGroupsInfo
-            }
             destination.groupName = cell.titleLable.text
-            destination.groupImage = cell.imageGroupTitle
-            var needType: String = "Ошибка Type"
-            var needCategory: String = "Ошибка Category"
-           
-            for i in 0...GroupFilteredArr.count {
-                if cell.titleLable.text == GroupFilteredArr[i].name {
-                    needType = GroupFilteredArr[i].type.rawValue
-                    needCategory = GroupFilteredArr[i].category
+            
+            for i in 0...vkGroups!.count {
+                if cell.titleLable.text == vkGroups?[i].name {
+                    destination.groupImage = String(vkGroups![i].groupImg)
+                    destination.groupType = vkGroups?[i].type
                     break
                 }
-                else {
-                    needType = "Ошибка2"
-                }
+                
             }
-            destination.groupType = needType
-            destination.groupCategory = needCategory
         }
     }
 }
@@ -76,23 +104,14 @@ class GroupViewController: UIViewController {
 
 extension GroupViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if isFiltering {
-            return filteredGroups.count
-        }
-        return ALLGroupsInfo.count
+        filteredGroups?.count ?? 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let group = groupTableView.dequeueReusableCell(withIdentifier: "Groups") as? Groups else { fatalError() }
-        var GroupNew: groupProfile
-        if isFiltering {
-            GroupNew = filteredGroups[indexPath.row]
-        } else {
-            GroupNew = ALLGroupsInfo[indexPath.row]
-        }
-        group.titleLable.text = GroupNew.name
-        group.imageGroupTitle.image = GroupNew.groupImg
-
+        
+        let groupModel = filteredGroups?[indexPath.item]
+        group.groupsModel = groupModel
         
         return group
     }
@@ -103,9 +122,13 @@ extension GroupViewController: UISearchResultsUpdating {
         filterContentForSearchText(searchController.searchBar.text!)
     }
     private func filterContentForSearchText(_ searchText: String) {
-        filteredGroups =  ALLGroupsInfo.filter({ (Groups: groupProfile) -> Bool in
-            return Groups.name.lowercased().contains(searchText.lowercased())
-        })
+        var filteredGroups: Results<GroupsItems>? {
+            if isFiltering {
+                return vkGroups?.filter(NSPredicate(format: "name CONTAINS[cd] %@", searchText))
+            } else {
+                return vkGroups
+            }
+        }
         groupTableView.reloadData()
     }
 }

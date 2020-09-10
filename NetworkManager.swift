@@ -44,61 +44,63 @@ class NetworkService {
         return session
     }()
     
-    func loadGroups(token: String) {
+    func loadGroups(token: String, completion: ((Result<[GroupsItems], Error>) -> Void)? = nil) {
         let params: Parameters = [
             "access_token": token,
             "extended": 1,
+            "fields": "photo_100, type",
             "v": version
         ]
         AF.request(baseUrl + Methods.groups.rawValue, method: .get, parameters: params).responseData {
             response in
-            guard let data = response.data else { return }
+            guard let data = response.value else { return }
             do {
-                let groupTest = try JSONDecoder().decode(GroupsInfo.self, from: data).response.items
-                self.saveGroupsData(groupTest)
-                print(groupTest[0].name)
+                let groups = try JSONDecoder().decode(GroupsInfo.self, from: data).response.items
+                completion?(.success(groups))
+                self.saveGroupsData(groups)
             }
             catch {
-                print(error)
+                print(error.localizedDescription)
+                completion?(.failure(error))
             }
-        }
-    }
-    func loadUsers(userId: Int, token: String, completion: @escaping (Result<[FriendsItems], NetworkError>) -> Void) {
-        let params: Parameters = [
-            "access_token": userId,
-            "user_id": token,
-            "order": "random",
-            "v": version,
-            "fields": "nickname",
-            "count": 40
-        ]
-        AF.request(baseUrl + Methods.friends.rawValue, method: .get, parameters: params).responseData {  response in
-            guard let data = response.data, let vkFriends = try? JSONDecoder().decode(FriendsInfo.self, from: data).response.items else {
-                completion(.failure(.incorrectData))
-                return
-            }
-            completion(.success(vkFriends))
         }.resume()
     }
-    func loadVkFriends(userId: Int, token: String, completion: @escaping (Result<[FriendsItems], NetworkError>) -> Void) {
-        let params: Parameters = [
-            "access_token": userId,
-            "user_id": token,
-            "order": "random",
-            "v": version,
-            "fields": "nickname",
-            "count": 40
-        ]
-        AF.request(baseUrl + Methods.friends.rawValue, method: .get, parameters: params).responseData { response in
-            guard let data = response.data,
-            let vkFriends = try? JSONDecoder().decode(FriendsInfo.self, from: data).response.items else {
-                completion(.failure(.incorrectData))
-                return
-            }
-            completion(.success(vkFriends))
-        }.resume()
-        
-    }
+//    func loadUsers(userId: Int, token: String, completion: @escaping (Result<[FriendsItems], NetworkError>) -> Void) {
+//        let params: Parameters = [
+//            "access_token": userId,
+//            "user_id": token,
+//            "order": "random",
+//            "v": version,
+//            "fields": "nickname",
+//            "count": 40
+//        ]
+//        AF.request(baseUrl + Methods.friends.rawValue, method: .get, parameters: params).responseData {  response in
+//            guard let data = response.data, let vkFriends = try? JSONDecoder().decode(FriendsInfo.self, from: data).response.items else {
+//                completion(.failure(.incorrectData))
+//                return
+//            }
+//            completion(.success(vkFriends))
+//        }.resume()
+//    }
+//    func loadVkFriends(userId: Int, token: String, completion: @escaping (Result<[FriendsItems], NetworkError>) -> Void) {
+//        let params: Parameters = [
+//            "access_token": userId,
+//            "user_id": token,
+//            "order": "random",
+//            "v": version,
+//            "fields": "nickname",
+//            "count": 40
+//        ]
+//        AF.request(baseUrl + Methods.friends.rawValue, method: .get, parameters: params).responseData { response in
+//            guard let data = response.data,
+//            let vkFriends = try? JSONDecoder().decode(FriendsInfo.self, from: data).response.items else {
+//                completion(.failure(.incorrectData))
+//                return
+//            }
+//            completion(.success(vkFriends))
+//        }.resume()
+//
+//    }
     
     func loadFriends(userId: Int, token: String, completion: ((Result<[FriendsItems], Error>) -> Void)? = nil) {
         let params: Parameters = [
@@ -106,7 +108,7 @@ class NetworkService {
             "user_id": userId,
             "order": "random",
             "v": version,
-            "fields": "nickname",
+            "fields": "photo_100",
             "count": 40
         ]
         
@@ -145,12 +147,6 @@ class NetworkService {
             realm.add(groups)
             try realm.commitWrite()
             print(Realm.Configuration.defaultConfiguration.fileURL ?? "Realm error")
-            //            } else  {
-            //                try! realm.write {
-            //                    realm.add(groups, update: .modified)
-            //
-            //                }
-            //            }
         } catch {
             print(error)
         }

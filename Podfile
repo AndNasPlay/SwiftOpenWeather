@@ -7,5 +7,6 @@ target 'OpenWeather' do
 
   pod 'Alamofire', '~> 5.2'
   pod 'RealmSwift'
+  pod 'SDWebImage', '=5.0' 
 
 end

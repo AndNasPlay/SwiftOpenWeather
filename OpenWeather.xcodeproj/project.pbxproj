@@ -50,6 +50,7 @@
 		16104B2E24C7044A003EF2BB /* frendCardProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = frendCardProfile.swift; sourceTree = "<group>"; };
 		164FE49124FC33A900CFD511 /* RealmSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RealmSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		16584D7525029E350082CE0A /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
+		16646537250A2E410014DB15 /* SDWebImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SDWebImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1667210824E3F82100129333 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		1680AAAA24D17312000EF8ED /* GroupCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCardViewController.swift; sourceTree = "<group>"; };
 		1680AAAF24D18AD8000EF8ED /* GroupCardCellCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCardCellCollectionView.swift; sourceTree = "<group>"; };
@@ -220,6 +221,7 @@
 		F703EA83DA41AA0DA330A467 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				16646537250A2E410014DB15 /* SDWebImage.framework */,
 				16E9A1E724FC37D5004E021D /* RealmSwift.framework */,
 				164FE49124FC33A900CFD511 /* RealmSwift.framework */,
 				16E47CF024E9A11D004CDB6A /* WebKit.framework */,

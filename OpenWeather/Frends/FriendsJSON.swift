@@ -21,6 +21,8 @@ class FriendsItems: Object, Codable {
     @objc dynamic var id: Int = 0
     @objc dynamic var firstName: String = ""
     @objc dynamic var lastName: String = ""
+    @objc dynamic var avatarFriend: String = ""
+
     
     override static func primaryKey() -> String? {
         return "id"
@@ -30,6 +32,8 @@ class FriendsItems: Object, Codable {
         case id
         case firstName = "first_name"
         case lastName = "last_name"
+        case avatarFriend = "photo_100"
+
     }
     convenience required init(from decoder: Decoder) throws {
         self.init()
@@ -37,6 +41,8 @@ class FriendsItems: Object, Codable {
         self.id = try values.decode(Int.self, forKey: .id)
         self.firstName = try values.decode(String.self, forKey: .firstName)
         self.lastName = try values.decode(String.self, forKey: .lastName)
+        self.avatarFriend = try values.decode(String.self, forKey: .avatarFriend)
+
     }
 
 }
