@@ -14,6 +14,7 @@ class GroupViewController: UIViewController {
     @IBOutlet weak var groupTableView: UITableView! {
         didSet {
             groupTableView.dataSource = self
+            groupTableView.delegate = self
         }
     }
     
@@ -27,6 +28,8 @@ class GroupViewController: UIViewController {
         Session.instanse.userId
     }
     
+    private var filteredGroupsNotificationToken: NotificationToken?
+    
     private var vkGroups: Results<GroupsItems>? {
         let vkGroups: Results<GroupsItems>? = realmManager?.getObjects()
         return vkGroups?.sorted(byKeyPath: "id", ascending: true)
@@ -37,7 +40,6 @@ class GroupViewController: UIViewController {
             case let .success(groups):
                 DispatchQueue.main.async {
                     try? self?.realmManager?.add(objects: groups)
-                    self?.groupTableView.reloadData()
                     completion?()
                 }
             case let .failure(error):
@@ -55,9 +57,9 @@ class GroupViewController: UIViewController {
     private var isFiltering: Bool {
         return searchController.isActive && !searchBarIsEmpty
     }
-    private var filteredGroups: [GroupsItems]? {
-        guard !searchText.isEmpty else { return vkGroups != nil ? Array(vkGroups!) : [] }
-        return vkGroups?.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+    private var filteredGroups: Results<GroupsItems>?  {
+        guard !searchText.isEmpty else { return vkGroups }
+        return vkGroups?.filter("name CONTAINS[cd] %@", searchText)
         
     }
     private var searchText: String {
@@ -66,6 +68,23 @@ class GroupViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        filteredGroupsNotificationToken = filteredGroups?.observe { [weak self ] change in
+            switch change {
+            case let .initial(vkGroups):
+                print("Initialized \(vkGroups.count)")
+                
+            case let .update(vkGroups, deletions: deletions, insertions: _, modifications: _):
+                print("""
+                    New count - \(vkGroups.count)
+                    Deletions: \(deletions)
+                    """)
+                self?.groupTableView.reloadData()
+
+            case let .error(Error):
+                print("Ошибка")
+            }
+            
+        }
         if let vkGroups = vkGroups, vkGroups.isEmpty {
             loadData()
         }
@@ -76,6 +95,9 @@ class GroupViewController: UIViewController {
         searchController.searchBar.placeholder = "Поиск"
         navigationItem.searchController = searchController
         definesPresentationContext = true
+    }
+    deinit {
+        filteredGroupsNotificationToken?.invalidate()
     }
     
     
@@ -89,10 +111,10 @@ class GroupViewController: UIViewController {
         {
             destination.groupName = cell.titleLable.text
             
-            for i in 0...vkGroups!.count {
-                if cell.titleLable.text == vkGroups?[i].name {
-                    destination.groupImage = String(vkGroups![i].groupImg)
-                    destination.groupType = vkGroups?[i].type
+            for i in 0...filteredGroups!.count {
+                if cell.titleLable.text == filteredGroups?[i].name {
+                    destination.groupImage = String(filteredGroups![i].groupImg)
+                    destination.groupType = filteredGroups?[i].type
                     break
                 }
                 
@@ -102,7 +124,7 @@ class GroupViewController: UIViewController {
 }
 
 
-extension GroupViewController: UITableViewDataSource {
+extension GroupViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         filteredGroups?.count ?? 1
     }
@@ -114,6 +136,22 @@ extension GroupViewController: UITableViewDataSource {
         group.groupsModel = groupModel
         
         return group
+    }
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        guard let vkGroup = filteredGroups?[indexPath.item] else { return nil }
+        
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { _, _, complete in
+            try? self.realmManager?.delete(object: vkGroup)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            complete(true)
+        }
+        let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
+        configuration.performsFirstActionWithFullSwipe = true
+        return configuration
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 

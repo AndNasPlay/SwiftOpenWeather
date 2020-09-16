@@ -10,7 +10,7 @@ import UIKit
 import RealmSwift
 
 class FrendsViewController: UIViewController {
-        
+    
     private let realmManager = RealmManager.shared
     private let networkManager = NetworkService.shared
     private var tokenTry: String {
@@ -19,6 +19,8 @@ class FrendsViewController: UIViewController {
     private var userIdTry: Int {
         Session.instanse.userId
     }
+    
+    private var filteredUsersNotificationToken: NotificationToken?
     
     @IBOutlet weak var tableView: UITableView! {
         didSet {
@@ -38,7 +40,6 @@ class FrendsViewController: UIViewController {
             case let .success(friends):
                 DispatchQueue.main.async {
                     try? self?.realmManager?.add(objects: friends)
-                    self?.tableView.reloadData()
                     completion?()
                 }
             case let .failure(error):
@@ -54,17 +55,42 @@ class FrendsViewController: UIViewController {
     private var isFiltering: Bool {
         return searchController.isActive && !searchBarIsEmpty
     }
-    private var filteredUsers: [FriendsItems]? {
-        guard !searchText.isEmpty else { return vkFriends != nil ? Array(vkFriends!) : [] }
-        return vkFriends?.filter { $0.firstName.lowercased().contains(searchText.lowercased()) }
+    private var filteredUsers: Results<FriendsItems>? {
+        guard !searchText.isEmpty else { return vkFriends }
+        return vkFriends?.filter("firstName CONTAINS[cd] %@", searchText)
         
     }
     private var searchText: String {
         searchController.searchBar.text ?? ""
     }
-    
+                    
     override func viewDidLoad() {
         super.viewDidLoad()
+        filteredUsersNotificationToken = filteredUsers?.observe { [weak self ] change in
+            switch change {
+            case let .initial(vkFriends):
+                print("Initialized \(vkFriends.count)")
+                
+            case let .update(vkFriends, deletions: deletions, insertions: _, modifications: _):
+                print("""
+                    New count - \(vkFriends.count)
+                    Deletions: \(deletions)
+                    """)
+                self?.tableView.reloadData()
+                //                self?.tableView.beginUpdates()
+                //
+                //                self?.tableView.deleteRows(at: deletions.map {IndexPath(item: $0, section: 0)},
+                //                                           with: .automatic)
+                //                self?.tableView.insertRows(at: insertions.map {IndexPath(item: $0, section: 0)},
+                //                                           with: .automatic)
+                //                self?.tableView.endUpdates()
+                
+            case let .error(Error):
+                print("Ошибка")
+            }
+            
+        }
+        
         if let vkFriends = vkFriends, vkFriends.isEmpty {
             loadData()
         }
@@ -75,6 +101,10 @@ class FrendsViewController: UIViewController {
         navigationItem.searchController = searchController
         definesPresentationContext = true
     }
+    deinit {
+        filteredUsersNotificationToken?.invalidate()
+    }
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
@@ -83,19 +113,14 @@ class FrendsViewController: UIViewController {
             let destination = segue.destination as? frendCardViewController {
             destination.frendName = frend.titleLable.text
             for i in 0...filteredUsers!.count {
-                if frend.titleLable.text == filteredUsers?[i].firstName {
+                if frend.titleLable.text == filteredUsers?[i].firstName && frend.friendsModel?.lastName == filteredUsers?[i].lastName {
                     destination.friendlastName = String(filteredUsers?[i].lastName ?? "Дима")
                     destination.frendAvatar = String(filteredUsers![i].avatarFriend)
                     break
                 }
-                else {
-                    print("Ошибка")
-                }
             }
         }
-        
     }
-    
 }
 extension FrendsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -109,7 +134,7 @@ extension FrendsViewController: UITableViewDelegate, UITableViewDataSource {
         friend.friendsModel = friendModel
         return friend
     }
-
+    
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         guard let vkFriend = filteredUsers?[indexPath.item] else { return nil }
@@ -120,8 +145,11 @@ extension FrendsViewController: UITableViewDelegate, UITableViewDataSource {
             complete(true)
         }
         let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
-               configuration.performsFirstActionWithFullSwipe = true
-               return configuration
+        configuration.performsFirstActionWithFullSwipe = true
+        return configuration
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
 }
@@ -132,7 +160,7 @@ extension FrendsViewController: UISearchResultsUpdating {
     private func filterContentForSearchText(_ searchText: String) {
         var filteredUsers: Results<FriendsItems>? {
             if isFiltering {
-                return vkFriends?.filter(NSPredicate(format: "name CONTAINS[cd] %@", searchText))
+                return vkFriends?.filter(NSPredicate(format: "firstName CONTAINS[cd] %@", searchText))
             } else {
                 return vkFriends
             }
@@ -140,70 +168,3 @@ extension FrendsViewController: UISearchResultsUpdating {
         tableView.reloadData()
     }
 }
-
-
-
-
-
-
-//extension FrendsViewController: UITableViewDataSource {
-//
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return vkFriends?.count ?? 0
-//            //sections[section].names.count
-//
-//    }
-//
-////    func numberOfSections(in tableView: UITableView) -> Int {
-////        return sections.count
-////
-////    }
-//
-////    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-////        return sections.map{$0.letter}
-////
-////    }
-//
-//
-//
-////    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-////
-////        return sections[section].letter
-////
-////    }
-//
-//
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        guard let frend = tableView.dequeueReusableCell(withIdentifier: "Frends") as? Frends else { fatalError() }
-////        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-////
-////            let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: UserInfoTableViewCell.self), for: indexPath) as! UserInfoTableViewCell
-////
-////            let userModel = filteredUsers?[indexPath.item]
-////            cell.userModel = userModel
-////
-////            return cell
-////        }
-////
-////        func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-////            guard let user = filteredUsers?[indexPath.item] else { return }
-////            if (try? realmManager?.delete(object: user)) != nil {
-////                tableView.deleteRows(at: [indexPath], with: .right)
-////            }
-////        }
-//
-//        //let friendsNewAll: [FriendsItems] = NetworkService.shared.loadFriends(userId: Session.instanse.userId, token: Session.instanse.token)
-//        let friendsModel = vkFriends?[indexPath.item]
-//        frend.friendsModel = friendsModel
-//        //frend.imageLable.image = allFrends.first?.avatar
-//
-//            //friendsNewAll[indexPath.section].firstName
-////            + friendsNewAll[indexPath.section].lastName
-//        //frend.SurName.text = vkFriends?[indexPath.item].lastName
-//        return frend
-//
-//
-//    }
-//
-
-
