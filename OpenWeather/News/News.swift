@@ -9,10 +9,10 @@
 import UIKit
 
 class News: UITableViewCell {
-    @IBOutlet weak var NewsLable: UILabel!
+    //@IBOutlet weak var NewsLable: UILabel!
     @IBOutlet weak var NewsTitleimage: UIImageView!
     @IBOutlet weak var NewsText: UILabel!
-    @IBOutlet weak var CategoryOfNews: UILabel!
+    //@IBOutlet weak var CategoryOfNews: UILabel!
     @IBOutlet weak var like: UIButton!
     @IBOutlet weak var likeCounts: UILabel!
     

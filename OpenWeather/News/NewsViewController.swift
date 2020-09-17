@@ -43,8 +43,6 @@ extension NewsViewController: UITableViewDataSource {
         if news.countLike == 0 {
             news.countLike = AllNews[indexPath.row].likes
         }
-        news.CategoryOfNews.text = AllNews[indexPath.row].category.rawValue
-        news.NewsLable.text = AllNews[indexPath.row].newsLable
         news.NewsText.text = AllNews[indexPath.row].newsText
         news.NewsTitleimage.image = AllNews[indexPath.row].newsImg
         AllNews[indexPath.row].likes = news.countLike
