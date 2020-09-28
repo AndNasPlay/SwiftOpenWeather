@@ -26,6 +26,7 @@ class NetworkService {
         case friends = "/method/friends.get"
         case photos = "/method/photos.get"
         case groupsSearch = "/method/groups.search"
+        case news = "/method/newsfeed.get"
     }
     
     enum AlbomID: String {
@@ -65,42 +66,6 @@ class NetworkService {
             }
         }.resume()
     }
-//    func loadUsers(userId: Int, token: String, completion: @escaping (Result<[FriendsItems], NetworkError>) -> Void) {
-//        let params: Parameters = [
-//            "access_token": userId,
-//            "user_id": token,
-//            "order": "random",
-//            "v": version,
-//            "fields": "nickname",
-//            "count": 40
-//        ]
-//        AF.request(baseUrl + Methods.friends.rawValue, method: .get, parameters: params).responseData {  response in
-//            guard let data = response.data, let vkFriends = try? JSONDecoder().decode(FriendsInfo.self, from: data).response.items else {
-//                completion(.failure(.incorrectData))
-//                return
-//            }
-//            completion(.success(vkFriends))
-//        }.resume()
-//    }
-//    func loadVkFriends(userId: Int, token: String, completion: @escaping (Result<[FriendsItems], NetworkError>) -> Void) {
-//        let params: Parameters = [
-//            "access_token": userId,
-//            "user_id": token,
-//            "order": "random",
-//            "v": version,
-//            "fields": "nickname",
-//            "count": 40
-//        ]
-//        AF.request(baseUrl + Methods.friends.rawValue, method: .get, parameters: params).responseData { response in
-//            guard let data = response.data,
-//            let vkFriends = try? JSONDecoder().decode(FriendsInfo.self, from: data).response.items else {
-//                completion(.failure(.incorrectData))
-//                return
-//            }
-//            completion(.success(vkFriends))
-//        }.resume()
-//
-//    }
     
     func loadFriends(userId: Int, token: String, completion: ((Result<[FriendsItems], Error>) -> Void)? = nil) {
         let params: Parameters = [
@@ -119,6 +84,36 @@ class NetworkService {
                 let friends = try JSONDecoder().decode(FriendsInfo.self, from: data).response.items
                 completion?(.success(friends))
                 self.saveFriendsData(friends)
+                print(Realm.Configuration.defaultConfiguration.fileURL)
+            }
+            catch {
+                print(error.localizedDescription)
+                completion?(.failure(error))
+            }
+        }.resume()
+    }
+    
+    func loadNews(userId: Int, token: String, completion: ((Result<[Group], Error>) -> Void)? = nil) {
+        let params: Parameters = [
+            "access_token": token,
+            "user_id": userId,
+            "v": version,
+            "filters": "post,photo,wall_photo,note",
+            "count": 20,
+            "scope": "friends, wall"
+        ]
+        
+        AF.request(baseUrl + Methods.news.rawValue, method: .post, parameters: params).responseData {
+            response in
+            guard let data = response.value else { return }
+            do {
+//                let newsItems: [Item] = try JSONDecoder().decode(NewsInfo.self, from: data).response.items
+//                let newsProfiles: [Profile] = try JSONDecoder().decode(NewsInfo.self, from: data).response.profiles
+                let newsGroups: [Group] = try JSONDecoder().decode(NewsInfo.self, from: data).response.groups
+                
+                completion?(.success(newsGroups))
+                print(Realm.Configuration.defaultConfiguration.fileURL)
+                self.saveNewsData(newsGroups: newsGroups)
             }
             catch {
                 print(error.localizedDescription)
@@ -139,12 +134,26 @@ class NetworkService {
             print(error)
         }
     }
+    
     func saveGroupsData(_ groups: [GroupsItems]) {
         do {
             let realm = try Realm()
             //            if realm.isEmpty {
             realm.beginWrite()
             realm.add(groups)
+            try realm.commitWrite()
+            print(Realm.Configuration.defaultConfiguration.fileURL ?? "Realm error")
+        } catch {
+            print(error)
+        }
+    }
+    
+    func saveNewsData(newsGroups:[Group]) {
+        do {
+            let realm = try Realm()
+            realm.beginWrite()
+            realm.deleteAll()
+            realm.add(newsGroups)
             try realm.commitWrite()
             print(Realm.Configuration.defaultConfiguration.fileURL ?? "Realm error")
         } catch {
