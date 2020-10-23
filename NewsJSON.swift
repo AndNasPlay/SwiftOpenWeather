@@ -4,264 +4,308 @@
 //
 //  Created by Андрей Щекатунов on 26.09.2020.
 //  Copyright © 2020 Andrey Shchekatunov. All rights reserved.
-//
 
 import Foundation
-import RealmSwift
 
+// MARK: - VkNews
+class VkNews: Codable {
+    let response: Response
 
-// MARK: - NewsInfo
-class NewsInfo: Codable {
-    var response: ResponseNews
+    init(response: Response) {
+        self.response = response
+    }
 }
 
 // MARK: - Response
-class ResponseNews: Codable {
-    var items: [Item]
-    var profiles: [Profile]
-    var groups: [Group]
-    var nextFrom: String
-    
+class Response: Codable {
+    let items: [Item]
+    let profiles: [Profile]
+    let groups: [Group]
+    let nextFrom: String
+
     enum CodingKeys: String, CodingKey {
         case items, profiles, groups
         case nextFrom = "next_from"
     }
+
+    init(items: [Item], profiles: [Profile], groups: [Group], nextFrom: String) {
+        self.items = items
+        self.profiles = profiles
+        self.groups = groups
+        self.nextFrom = nextFrom
+    }
 }
 
 // MARK: - Group
-class Group: Object, Codable {
-    @objc dynamic var id: Int = 0
-    @objc dynamic var name: String = ""
-    @objc dynamic var screenName: String = ""
-    @objc dynamic var type: String = ""
-    @objc dynamic var photo50: String = ""
-    @objc dynamic var photo100: String = ""
-    @objc dynamic var photo200: String = ""
-    
+class Group: Codable {
+    let id: Int
+    let name, screenName: String
+    let isClosed: Int
+    let type: String
+    let isAdmin, isMember, isAdvertiser: Int
+    let photo50, photo100, photo200: String
+
     enum CodingKeys: String, CodingKey {
         case id, name
         case screenName = "screen_name"
+        case isClosed = "is_closed"
         case type
+        case isAdmin = "is_admin"
+        case isMember = "is_member"
+        case isAdvertiser = "is_advertiser"
         case photo50 = "photo_50"
         case photo100 = "photo_100"
         case photo200 = "photo_200"
     }
-    
-    convenience required init(from decoder: Decoder) throws {
-        self.init()
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try values.decode(Int.self, forKey: .id)
-        self.name = try values.decode(String.self, forKey: .name)
-        self.screenName = try values.decode(String.self, forKey: .screenName)
-        self.type = try values.decode(String.self, forKey: .type)
-        self.photo50 = try values.decode(String.self, forKey: .photo50)
-        self.photo100 = try values.decode(String.self, forKey: .photo100)
-        self.photo200 = try values.decode(String.self, forKey: .photo200)
+
+    init(id: Int, name: String, screenName: String, isClosed: Int, type: String, isAdmin: Int, isMember: Int, isAdvertiser: Int, photo50: String, photo100: String, photo200: String) {
+        self.id = id
+        self.name = name
+        self.screenName = screenName
+        self.isClosed = isClosed
+        self.type = type
+        self.isAdmin = isAdmin
+        self.isMember = isMember
+        self.isAdvertiser = isAdvertiser
+        self.photo50 = photo50
+        self.photo100 = photo100
+        self.photo200 = photo200
     }
 }
 
 // MARK: - Item
-class Item: Object, Codable {
-    @objc dynamic var sourceID: Int = 0
-    @objc dynamic var date: Int = 0
-    @objc dynamic var postType: String = ""
-    @objc dynamic var text: String = ""
-    let attachments = List<Attachment>()
-    let comments = List<Comments>()
-    let likes = List<Likes>()
-    let views = List<Views>()
-    @objc dynamic var isFavorite: Bool = true
-    @objc dynamic var postID: Int = 0
-    @objc dynamic var type: String = ""
-    
+class Item: Codable {
+    let sourceID, date: Int
+    let canDoubtCategory, canSetCategory: Bool
+    let postType, text: String
+    let markedAsAds: Int
+    let attachments: [Attachment]
+    let postSource: PostSource
+    let comments: Comments
+    let likes: Likes
+    let reposts: Reposts
+    let views: Views
+    let isFavorite: Bool
+    let postID: Int
+    let type: String
+
     enum CodingKeys: String, CodingKey {
         case sourceID = "source_id"
         case date
+        case canDoubtCategory = "can_doubt_category"
+        case canSetCategory = "can_set_category"
         case postType = "post_type"
         case text
+        case markedAsAds = "marked_as_ads"
         case attachments
-        case comments, likes, views
+        case postSource = "post_source"
+        case comments, likes, reposts, views
         case isFavorite = "is_favorite"
         case postID = "post_id"
         case type
     }
-    
-    convenience required init(from decoder: Decoder) throws {
-        self.init()
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        self.sourceID = try values.decode(Int.self, forKey: .sourceID)
-        self.date = try values.decode(Int.self, forKey: .date)
-        self.postType = try values.decode(String.self, forKey: .postType)
-        self.text = try values.decode(String.self, forKey: .text)
-//        self.attachments = try values.decode(List<Attachment>.self, forKey: .attachments)
-//        self.comments = try values.decode(List<Comments>.self, forKey: .comments)
-//        self.likes = try values.decode(List<Likes>.self, forKey: .likes)
-//        self.views = try values.decode(List<Views>.self, forKey: .views)
-        self.isFavorite = try values.decode(Bool.self, forKey: .isFavorite)
-        self.postID = try values.decode(Int.self, forKey: .postID)
-        self.type = try values.decode(String.self, forKey: .type)
+
+    init(sourceID: Int, date: Int, canDoubtCategory: Bool, canSetCategory: Bool, postType: String, text: String, markedAsAds: Int, attachments: [Attachment], postSource: PostSource, comments: Comments, likes: Likes, reposts: Reposts, views: Views, isFavorite: Bool, postID: Int, type: String) {
+        self.sourceID = sourceID
+        self.date = date
+        self.canDoubtCategory = canDoubtCategory
+        self.canSetCategory = canSetCategory
+        self.postType = postType
+        self.text = text
+        self.markedAsAds = markedAsAds
+        self.attachments = attachments
+        self.postSource = postSource
+        self.comments = comments
+        self.likes = likes
+        self.reposts = reposts
+        self.views = views
+        self.isFavorite = isFavorite
+        self.postID = postID
+        self.type = type
     }
-    
 }
 
 // MARK: - Attachment
-class Attachment: Object, Codable {
-    @objc dynamic var type: String = ""
-    let photo = List<Photo>()
-    
-    enum CodingKeys: String, CodingKey {
-        case type
-        case photo
-    }
-    
-    convenience required init(from decoder: Decoder) throws {
-        self.init()
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try values.decode(String.self, forKey: .type)
-        //self.photo = try values.decode([Photo].self, forKey: .photo)
+class Attachment: Codable {
+    let type: String
+    let photo: Photo
+
+    init(type: String, photo: Photo) {
+        self.type = type
+        self.photo = photo
     }
 }
 
 // MARK: - Photo
-class Photo: Object, Codable {
-    @objc dynamic var albumID: Int = 0
-    @objc dynamic var date: Int = 0
-    @objc dynamic var id: Int = 0
-    @objc dynamic var ownerID: Int = 0
-    @objc dynamic var accessKey: String = ""
-    @objc dynamic var postID: Int = 0
-    let sizes = List<Size>()
-    @objc dynamic var text: String = ""
-    @objc dynamic var userID: Int = 0
-    
+class Photo: Codable {
+    let albumID, date, id, ownerID: Int
+    let hasTags: Bool
+    let accessKey: String
+    let postID: Int
+    let sizes: [Size]
+    let text: String
+    let userID: Int
+
     enum CodingKeys: String, CodingKey {
         case albumID = "album_id"
         case date, id
         case ownerID = "owner_id"
+        case hasTags = "has_tags"
         case accessKey = "access_key"
         case postID = "post_id"
         case sizes, text
         case userID = "user_id"
     }
-    
-    convenience required init(from decoder: Decoder) throws {
-        self.init()
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        self.albumID = try values.decode(Int.self, forKey: .albumID)
-        self.date = try values.decode(Int.self, forKey: .date)
-        self.id = try values.decode(Int.self, forKey: .id)
-        self.ownerID = try values.decode(Int.self, forKey: .ownerID)
-        self.accessKey = try values.decode(String.self, forKey: .accessKey)
-        self.postID = try values.decode(Int.self, forKey: .postID)
-        //self.sizes = try values.decode([Size].self, forKey: .sizes)
-        self.text = try values.decode(String.self, forKey: .text)
-        self.userID = try values.decode(Int.self, forKey: .userID)
+
+    init(albumID: Int, date: Int, id: Int, ownerID: Int, hasTags: Bool, accessKey: String, postID: Int, sizes: [Size], text: String, userID: Int) {
+        self.albumID = albumID
+        self.date = date
+        self.id = id
+        self.ownerID = ownerID
+        self.hasTags = hasTags
+        self.accessKey = accessKey
+        self.postID = postID
+        self.sizes = sizes
+        self.text = text
+        self.userID = userID
     }
 }
 
 // MARK: - Size
-class Size: Object, Codable {
-    @objc dynamic var height: Int = 0
-    @objc dynamic var url: String = ""
-    @objc dynamic var type: String = ""
-    @objc dynamic var width: Int = 0
-    
-    enum CodingKeys: String, CodingKey {
-        case height
-        case url
-        case type
-        case width
-    }
-    
-    convenience required init(from decoder: Decoder) throws {
-        self.init()
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        self.height = try values.decode(Int.self, forKey: .height)
-        self.url = try values.decode(String.self, forKey: .url)
-        self.type = try values.decode(String.self, forKey: .type)
-        self.width = try values.decode(Int.self, forKey: .width)
+class Size: Codable {
+    let height: Int
+    let url: String
+    let type: String
+    let width: Int
+
+    init(height: Int, url: String, type: String, width: Int) {
+        self.height = height
+        self.url = url
+        self.type = type
+        self.width = width
     }
 }
 
 // MARK: - Comments
-class Comments: Object, Codable {
-    @objc dynamic var count: Int = 0
-    
+class Comments: Codable {
+    let count, canPost: Int
+
     enum CodingKeys: String, CodingKey {
         case count
+        case canPost = "can_post"
     }
-    
-    convenience required init(from decoder: Decoder) throws {
-        self.init()
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        self.count = try values.decode(Int.self, forKey: .count)
+
+    init(count: Int, canPost: Int) {
+        self.count = count
+        self.canPost = canPost
     }
-    
 }
 
 // MARK: - Likes
-class Likes: Object, Codable {
-    @objc dynamic var count: Int = 0
-    @objc dynamic var userLikes: Int = 0
-    
+class Likes: Codable {
+    let count, userLikes, canLike, canPublish: Int
+
     enum CodingKeys: String, CodingKey {
         case count
         case userLikes = "user_likes"
+        case canLike = "can_like"
+        case canPublish = "can_publish"
     }
-    
-    convenience required init(from decoder: Decoder) throws {
-        self.init()
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        self.count = try values.decode(Int.self, forKey: .count)
-        self.userLikes = try values.decode(Int.self, forKey: .userLikes)
+
+    init(count: Int, userLikes: Int, canLike: Int, canPublish: Int) {
+        self.count = count
+        self.userLikes = userLikes
+        self.canLike = canLike
+        self.canPublish = canPublish
+    }
+}
+
+// MARK: - PostSource
+class PostSource: Codable {
+    let type: String
+
+    init(type: String) {
+        self.type = type
+    }
+}
+
+// MARK: - Reposts
+class Reposts: Codable {
+    let count, userReposted: Int
+
+    enum CodingKeys: String, CodingKey {
+        case count
+        case userReposted = "user_reposted"
+    }
+
+    init(count: Int, userReposted: Int) {
+        self.count = count
+        self.userReposted = userReposted
     }
 }
 
 // MARK: - Views
-class Views: Object, Codable {
-    @objc dynamic var count: Int = 0
-    
-    enum CodingKeys: String, CodingKey {
-        case count
-    }
-    
-    convenience required init(from decoder: Decoder) throws {
-        self.init()
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        self.count = try values.decode(Int.self, forKey: .count)
+class Views: Codable {
+    let count: Int
+
+    init(count: Int) {
+        self.count = count
     }
 }
 
 // MARK: - Profile
-class Profile: Object, Codable {
-    @objc dynamic var id: Int = 0
-    @objc dynamic var firstName: String = ""
-    @objc dynamic var lastName: String = ""
-    @objc dynamic var sex: Int = 0
-    @objc dynamic var screenName: String = ""
-    @objc dynamic var photo50: String = ""
-    @objc dynamic var photo100: String = ""
-    
+class Profile: Codable {
+    let id: Int
+    let firstName, lastName: String
+    let isClosed, canAccessClosed: Bool
+    let sex: Int
+    let screenName: String
+    let photo50, photo100: String
+    let online: Int
+    let onlineInfo: OnlineInfo
+
     enum CodingKeys: String, CodingKey {
         case id
         case firstName = "first_name"
         case lastName = "last_name"
+        case isClosed = "is_closed"
+        case canAccessClosed = "can_access_closed"
         case sex
         case screenName = "screen_name"
         case photo50 = "photo_50"
         case photo100 = "photo_100"
+        case online
+        case onlineInfo = "online_info"
     }
-    
-    convenience required init(from decoder: Decoder) throws {
-        self.init()
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try values.decode(Int.self, forKey: .id)
-        self.firstName = try values.decode(String.self, forKey: .firstName)
-        self.lastName = try values.decode(String.self, forKey: .lastName)
-        self.sex = try values.decode(Int.self, forKey: .sex)
-        self.screenName = try values.decode(String.self, forKey: .screenName)
-        self.photo50 = try values.decode(String.self, forKey: .photo50)
-        self.photo100 = try values.decode(String.self, forKey: .photo100)
+
+    init(id: Int, firstName: String, lastName: String, isClosed: Bool, canAccessClosed: Bool, sex: Int, screenName: String, photo50: String, photo100: String, online: Int, onlineInfo: OnlineInfo) {
+        self.id = id
+        self.firstName = firstName
+        self.lastName = lastName
+        self.isClosed = isClosed
+        self.canAccessClosed = canAccessClosed
+        self.sex = sex
+        self.screenName = screenName
+        self.photo50 = photo50
+        self.photo100 = photo100
+        self.online = online
+        self.onlineInfo = onlineInfo
     }
-    
+}
+
+// MARK: - OnlineInfo
+class OnlineInfo: Codable {
+    let visible, isOnline, isMobile: Bool
+
+    enum CodingKeys: String, CodingKey {
+        case visible
+        case isOnline = "is_online"
+        case isMobile = "is_mobile"
+    }
+
+    init(visible: Bool, isOnline: Bool, isMobile: Bool) {
+        self.visible = visible
+        self.isOnline = isOnline
+        self.isMobile = isMobile
+    }
 }
