@@ -141,7 +141,6 @@ class Photo: Codable {
     let albumID, date, id, ownerID: Int
     let hasTags: Bool
     let accessKey: String
-    let postID: Int
     let sizes: [Size]
     let text: String
     let userID: Int
@@ -152,19 +151,17 @@ class Photo: Codable {
         case ownerID = "owner_id"
         case hasTags = "has_tags"
         case accessKey = "access_key"
-        case postID = "post_id"
         case sizes, text
         case userID = "user_id"
     }
 
-    init(albumID: Int, date: Int, id: Int, ownerID: Int, hasTags: Bool, accessKey: String, postID: Int, sizes: [Size], text: String, userID: Int) {
+    init(albumID: Int, date: Int, id: Int, ownerID: Int, hasTags: Bool, accessKey: String, sizes: [Size], text: String, userID: Int) {
         self.albumID = albumID
         self.date = date
         self.id = id
         self.ownerID = ownerID
         self.hasTags = hasTags
         self.accessKey = accessKey
-        self.postID = postID
         self.sizes = sizes
         self.text = text
         self.userID = userID
@@ -189,15 +186,18 @@ class Size: Codable {
 // MARK: - Comments
 class Comments: Codable {
     let count, canPost: Int
+    let groupsCanPost: Bool
 
     enum CodingKeys: String, CodingKey {
         case count
         case canPost = "can_post"
+        case groupsCanPost = "groups_can_post"
     }
 
-    init(count: Int, canPost: Int) {
+    init(count: Int, canPost: Int, groupsCanPost: Bool) {
         self.count = count
         self.canPost = canPost
+        self.groupsCanPost = groupsCanPost
     }
 }
 

@@ -77,7 +77,7 @@ class NetworkService {
             "order": "random",
             "v": version,
             "fields": "photo_100",
-            "count": 100
+            "count": 10
         ]
         
         AF.request(baseUrl + Methods.friends.rawValue, method: .get, parameters: params).responseData {
@@ -180,147 +180,146 @@ class NetworkService {
     //        }
     //    }
     
-    func loadVKNewsFeed(completion: @escaping (Swift.Result<String?, Error>) -> Void) {
+    func loadVKNewsFeed(completion: ((Result<NewsAllFeed, Error>) -> Void)? = nil) {
         let params: Parameters = [
             "access_token": Session.instanse.token,
-            "scope": "friends,photos,wall,groups",
+            "filters": "friends,photos,wall,groups",
             "v": version,
-            "count": "10",
+            "count": "20",
+            "scope": "262150"
             //"start_from": startFrom
         ]
         
-        
-        NetworkService.session.request(baseUrl + Methods.news.rawValue, method: .get, parameters: params).responseData { response in
-            print(NetworkService.session.request(self.baseUrl + Methods.news.rawValue, method: .get, parameters: params))
-            
+        AF.request(testurl, method: .get, parameters: params).responseData { response in
+            print(AF.request(self.baseUrl + Methods.news.rawValue, method: .get, parameters: params))
             switch response.result {
-            case .failure(let error ):
-                completion(.failure(error))
             case .success(let value):
-                guard let Data = response.data else { return }
-                let newsVk = try! JSONDecoder().decode(VkNews.self, from: Data).response.groups
-                print(newsVk.count ?? "пусто")
-                let nextFrom = try? JSONDecoder().decode(VkNews.self, from: Data).response.nextFrom
-                completion(.success(nextFrom))
-            }
-        }
-        
-        //        AF.request(testurl, method: .get, parameters: params).responseJSON { response in
-        //            print("one")
-        //            print(AF.request(self.testurl, method: .get, parameters: params))
-        //            switch response.result {
-        //            case .failure(let error):
-        //                completion(.failure(error))
-        //            case .success(let value):
-        //                let json = JSON(value)
-        //                var news = [Item]()
-        //                var users = [Profile]()
-        //                var groups = [Group]()
-        //                var nextFrom = ""
-        ////                news = json["response"]["items"].array
-        ////                users = json["response"]["profiles"].arrayValue.map { Profile(json: $0) }
-        ////                groups = json["response"]["groups"].arrayValue.map { Group(json: $0) }
-        //                nextFrom = json["response"]["next_from"].stringValue
-        //
-        //                //let news = VkNews(items: news, profiles: users, groups: groups)
-        //                completion(.success(nextFrom), nil)
-        //
-        //            }
-        //        }
-    }
-    
-    
-    func saveFriendsData(_ friends: [FriendsItems]) {
-        do {
-            let realm = try Realm()
-            realm.beginWrite()
-            realm.deleteAll()
-            realm.add(friends)
-            try realm.commitWrite()
-            print(Realm.Configuration.defaultConfiguration.fileURL ?? "Realm error")
-        } catch {
-            print(error)
-        }
-    }
-    
-    func saveGroupsData(_ groups: [GroupsItems]) {
-        do {
-            let realm = try Realm()
-            //            if realm.isEmpty {
-            realm.beginWrite()
-            realm.add(groups)
-            try realm.commitWrite()
-            print(Realm.Configuration.defaultConfiguration.fileURL ?? "Realm error")
-        } catch {
-            print(error)
-        }
-    }
-    
-    //    func saveNewsData(newsGroups:[Group]) {
-    //        do {
-    //            let realm = try Realm()
-    //            realm.beginWrite()
-    //            realm.deleteAll()
-    //            realm.add(newsGroups)
-    //            try realm.commitWrite()
-    //            print(Realm.Configuration.defaultConfiguration.fileURL ?? "Realm error")
-    //        } catch {
-    //            print(error)
-    //        }
-    //    }
-    
-    func loadPhoto(userId: Int, token: String) {
-        let params: Parameters = [
-            "access_token": token,
-            "owner_id": userId,
-            "album_id": AlbomID.profile,
-            "rev": "1",
-            "count": "1",
-            "v": version,
-        ]
-        AF.request(baseUrl + Methods.photos.rawValue, method: .get, parameters: params).responseData {
-            response in
-            guard let data = response.data else { return }
-            do {
-                let photos = try JSONDecoder().decode(PhotoInfo.self, from: data).response.items
-                print(photos[0].id, photos[0].ownerId, photos[0].sizes)
-                self.savePhotoData(photos)
-            }
-            catch {
-                print(error)
-            }
-        }
-    }
-    func savePhotoData(_ photo: [PhotoItems]) {
-        do {
-            let realm = try Realm()
-            realm.beginWrite()
-            realm.add(photo)
-            try realm.commitWrite()
-            print(Realm.Configuration.defaultConfiguration.fileURL ?? "Realm error")
-        } catch {
-            print(error)
-        }
-    }
-    func groupsSearch(token: String, searchText: String) {
-        let params: Parameters = [
-            "access_token": token,
-            "q": searchText,
-            "type": "group",
-            "count": "1",
-            "v": version
-        ]
-        NetworkService.session.request(baseUrl + Methods.groupsSearch.rawValue, method: .get, parameters: params).responseData { response in
-            guard let data = response.data else { return }
-            do {
-                let groupSearch = try JSONDecoder().decode(GroupsInfo.self, from: data).response.items
-                print(groupSearch[0].name)
-            }
-            catch {
-                print(error)
-            }
+                let json = JSON(value)
+                var friends1 = [FriendNews]()
+                var groups1 = [GroupNews]()
+                var news = [NewsItem]()
+                
+                
+                let newsGroup = DispatchGroup()
+                DispatchQueue.global().async(group: newsGroup) {
+                   friends1 = json["response"]["profiles"].arrayValue.map { FriendNews(json: $0) }
+                }
+                DispatchQueue.global().async(group: newsGroup) {
+                   groups1 = json["response"]["groups"].arrayValue.map { GroupNews(json: $0) }
+                }
+                DispatchQueue.global().async(group: newsGroup) {
+                    news = json["response"]["items"].arrayValue.map { NewsItem(json: $0) }
+                }
+                DispatchQueue.global().async(group: newsGroup) {
+                   let nextFrom = json["response"]["next_from"].stringValue
+                    Session.instanse.nextForm = nextFrom
+                }
             
+                newsGroup.notify(queue: DispatchQueue.main) {
+                    let newsALL = NewsAllFeed(friendsNews: friends1, groupNews: groups1, newsItems: news)
+                    completion?(.success(newsALL))
+                }
+                
+            case let .failure(error):
+                completion?(.failure(error))
+            }
         }
+    }
+    
+
+func saveFriendsData(_ friends: [FriendsItems]) {
+    do {
+        let realm = try Realm()
+        realm.beginWrite()
+        realm.deleteAll()
+        realm.add(friends)
+        try realm.commitWrite()
+        print(Realm.Configuration.defaultConfiguration.fileURL ?? "Realm error")
+    } catch {
+        print(error)
     }
 }
+
+func saveGroupsData(_ groups: [GroupsItems]) {
+    do {
+        let realm = try Realm()
+        //            if realm.isEmpty {
+        realm.beginWrite()
+        realm.add(groups)
+        try realm.commitWrite()
+        print(Realm.Configuration.defaultConfiguration.fileURL ?? "Realm error")
+    } catch {
+        print(error)
+    }
+}
+
+//    func saveNewsData(newsGroups:[Group]) {
+//        do {
+//            let realm = try Realm()
+//            realm.beginWrite()
+//            realm.deleteAll()
+//            realm.add(newsGroups)
+//            try realm.commitWrite()
+//            print(Realm.Configuration.defaultConfiguration.fileURL ?? "Realm error")
+//        } catch {
+//            print(error)
+//        }
+//    }
+//
+//func loadPhoto(userId: Int, token: String) {
+//    let params: Parameters = [
+//        "access_token": token,
+//        "owner_id": userId,
+//        "album_id": AlbomID.profile,
+//        "rev": "1",
+//        "count": "1",
+//        "v": version,
+//    ]
+//    AF.request(baseUrl + Methods.photos.rawValue, method: .get, parameters: params).responseData {
+//        response in
+//        guard let data = response.data else { return }
+//        do {
+//            let photos = try JSONDecoder().decode(PhotoInfo.self, from: data).response.items
+//            print(photos[0].id, photos[0].ownerId, photos[0].sizes)
+//            self.savePhotoData(photos)
+//        }
+//        catch {
+//            print(error)
+//        }
+//    }
+//}
+func savePhotoData(_ photo: [PhotoItems]) {
+    do {
+        let realm = try Realm()
+        realm.beginWrite()
+        realm.add(photo)
+        try realm.commitWrite()
+        print(Realm.Configuration.defaultConfiguration.fileURL ?? "Realm error")
+    } catch {
+        print(error)
+    }
+}
+//func groupsSearch(token: String, searchText: String) {
+//    let params: Parameters = [
+//        "access_token": token,
+//        "q": searchText,
+//        "type": "group",
+//        "count": "1",
+//        "v": version
+//    ]
+//    NetworkService.session.request(baseUrl + Methods.groupsSearch.rawValue, method: .get, parameters: params).responseData { response in
+//        guard let data = response.data else { return }
+//        do {
+//            let groupSearch = try JSONDecoder().decode(GroupsInfo.self, from: data).response.items
+//            print(groupSearch[0].name)
+//        }
+//        catch {
+//            print(error)
+//        }
+//
+//    }
+//}
+}
+
+
 

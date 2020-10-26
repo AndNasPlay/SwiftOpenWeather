@@ -927,7 +927,9 @@
                                         <connections>
                                             <outlet property="NewsText" destination="ZN1-Gt-eBA" id="kcG-lQ-Oma"/>
                                             <outlet property="NewsTitleimage" destination="3om-Th-J9R" id="U1J-VA-Faa"/>
+                                            <outlet property="autorName" destination="FqW-5h-Kz3" id="c4C-6e-uyb"/>
                                             <outlet property="comment" destination="f2R-VW-h3R" id="TTa-AW-J3F"/>
+                                            <outlet property="dateTimeNews" destination="fDG-7B-xac" id="dCb-rX-OOs"/>
                                             <outlet property="eyeCount" destination="hen-uO-BgU" id="SYu-1W-IyE"/>
                                             <outlet property="like" destination="rD9-i0-0D5" id="qI9-w9-CcB"/>
                                             <outlet property="likeCounts" destination="0y7-d2-lbW" id="EeU-wl-q67"/>

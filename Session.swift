@@ -11,6 +11,7 @@ class Session {
     
     var token: String = ""
     var userId: Int = 0
+    var nextForm: String = ""
     static let instanse = Session()
     private init() {}
 }
